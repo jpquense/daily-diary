@@ -5,9 +5,9 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const winston = require('winston');
 const mongoose = require('mongoose');
-const { router: userRouter } = require('./routers/user.router');
-const { router: gratitudesRouter } = require('./routers/gratitutdes.router');
-const { router: goalsRouter } = require('./routers/goals.router');
+// const { router: userRouter } = require('./routers/user.router');
+// const { router: gratitudesRouter } = require('./routers/gratitutdes.router');
+// const { router: goalsRouter } = require('./routers/goals.router');
 
 const app = express();
 
@@ -38,13 +38,13 @@ if (ENV === 'development') {
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/login.html');
+    res.sendFile(__dirname + '/public/login/login.html');
 });
 
 // Routes
-app.use('/api', userRouter);
-app.use('/api', gratitudesRouter);
-app.use('/api', goalsRouter);
+// app.use('/api', userRouter);
+// app.use('/api', gratitudesRouter);
+// app.use('/api', goalsRouter);
 
 app.get('/status', (req, res) => {
   res.json({ processId: process.pid });
