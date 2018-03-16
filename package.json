@@ -1,0 +1,14 @@
+{
+  "name": "daily-diary",
+  "version": "1.0.0",
+  "description": "Make recording gratitudes and goals easy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "John P Quense",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
