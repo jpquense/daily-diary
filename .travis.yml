@@ -1,2 +1,9 @@
 language: node_js
 node_js: node
+deploy:
+  provider: heroku
+  api_key:
+    secure: XOSlh/ApxmIggglCAq3jG7d/n8eAYX5CRBfzSw0lG9GkyKybVc/jLPdmEHC7Bsz5j63OrRy4NAN5WBIje8KIxUo4vXZQ3G/wWXI+ciZush0h9/9jxKOHV0xqRZv8vTVHV3lVsHrIsmLZh4bGqUCwTGAWGwi7xFLhFBkd+KYlX20YG8XjAsg+IgiJ991ALs9DuCMBo/Qquh6zVI/dVH8lIicU9LhDDiwnR6rAsA+BOE7TLXtsEuWvSmPi/r0v7alE0E1BWsi+x6u4+tBonMsuFxCG0mYZNdXMoXKLTHi5Xk46hRiKIpmDUr8PIVzS1Q5uiIgBYScR+a3thUy6LntszUk097aOdMxUBERPQBVZ1rRUeZZGPKmLwUQ0YLSzQbGi0aqAwRt4N2C23s99jbxZPqVO9MR6Uhg0Z2RE3a02ZhbYzhT6Qp+wPje09xH5T2OmCWIWMeASqx7Qsl4d2NeIF58DrnnrIcNdRB1jFdR1ufrxwbYCnXMVBvBXukse5P8GcyevLrMHHnTwY9b44uRoO5cwcC55vBKrxXnehiXu3pjfhEEfxCi7AM7WyCPt+olddQ1OW5VtNWYovAZiWffgshaem2PE6XEQDwMlmwN2V0pVT38v4ddP5O47nWqSudbKnPWv1Jfk++8lz/SuWSxej2jxAjO27PTOTZ1Rc95jq+0=
+  app: tranquil-wave-50065
+  on:
+    repo: jpquense/daily-diary
