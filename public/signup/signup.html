@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Signup | Daily Diary</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/generic.styles/grid.css">
+        <link rel="stylesheet" href="/signup/signup.css">
+    </head>
+    <body>
+        <nav role="navigation">
+            <p>Already have an account? <a href="/"><strong>Login</strong></a></p>
+        </nav>
+        <header role="banner">
+            <h1>Daily Diary</h1>
+        </header>
+        <main role="main">
+             <form action="" method="GET">
+                 <fieldset>
+                    <legend>Create Account</legend>
+                    
+                    <label for="firstName" class="black-text"><strong>First name</strong></label>                    
+                    <input id="firstName" class="input" type="text" placeholder="first name">
+
+                    <label for="lastName" class="black-text"><strong>Last name</strong></label>                    
+                    <input id="lastName" class="input" type="text" placeholder="last name">
+
+                    <label for="email" class="black-text"><strong>Email address</strong></label>                    
+                    <input id="email" class="input" type="text" placeholder="email address">
+
+                    <label for="password" class="black-text"><strong>Password</strong><em>- at least 8 characters</em></label> 
+                    <input class="input" type="text" placeholder="password">
+
+                    <p>Password tip: Create a password using four random words. <br>It's easy to remember, but hard to crack.</p>
+                    <button class="btn" type="submit"><a href="/home/home.html">Create Account</a></button>
+                </fieldset>
+            </form>
+        </main>
+           
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>       
+        <script type="text/javascript" src="/signup/signup.js"></script>
+    </body>
+</html>

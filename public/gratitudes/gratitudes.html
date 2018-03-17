@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Gratitudes | Daily Diary</title>
+        <meta name="description" content="First things first shows us how to start each day in the best mindset possible">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css">
+        <link rel="stylesheet" href="/generic.styles/grid.css">
+        <link rel="stylesheet" href="/gratitudes/gratitudes.css">
+        <link rel="icon" type="image/png" href="/images/favicon-note.png" />
+    </head>
+    <body>
+        <header class="row">
+            <img src="/images/family-walk.jpg" alt="family playing in park">
+            <h1 class="col-12">Daily Diary</h1>
+        </header>
+        <main>
+            <form action="/someEndPoint" method="POST">
+                <label class="col-12" for="gratitude1">I am grateful for...</label>
+                <input class="input" type="text" name="gratitude1" id="gratitude1">
+                <label class="col-12" for="gratitude2">I am grateful for...</label>
+                <input class="input" type="text" name="gratitude2" id="gratitude2">
+                <label class="col-12" for="gratitude3">I am grateful for...</label>
+                <input class="input" type="text" name="gratitude3" id="gratitude3">
+                <button type="submit">Submit</button>
+            </form>
+            <a href="/goals/goals.html"><button type="button">Next</button></a> 
+        </main>
+        <footer class="row">
+            <p>Everyday is another oppurtunity to <strong>CHOOSE</strong>.<br>
+            <em>Step one</em> - Jot down three things that you are grateful for.<br>Be as specific as
+             possible! It really helps with impact.</p>
+        </footer>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>       
+        <script type="text/javascript" src="/gratitudes/gratitudes.js"></script>
+    </body>
+</html>

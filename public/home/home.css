@@ -1,0 +1,172 @@
+* {
+box-sizing: border-box;
+font-size: 16px;
+}
+
+body {
+    font-family: mono, helvetica, arial, sans-serif;
+    margin-top: 50px;
+    background-color: rgb(70, 69, 67);
+    color: white;
+    /* text-align: center; */
+    background-size: cover;
+}
+
+header {
+    text-align: center;
+}
+
+h1 {
+    font-size: 22px;
+}
+
+img {
+ 
+    width: 200px;
+    border-radius: 50%
+}
+
+main {
+    text-align: center;
+}
+
+button {
+    margin: 5px auto;
+    width: 200px;
+    padding-top: 5px;
+    padding-bottom: 5px; 
+    border-radius: 5px;
+    display: block;
+}
+
+button:hover {
+    cursor: pointer;
+    background-color: gainsboro;
+}
+
+.footer {
+    text-align: center;
+    border: 1px solid whitesmoke;
+    border-radius: 5px;
+    width: 300px;
+}
+
+footer p .footer {
+    font-size: 12px;
+}
+
+@media only screen and (min-width: 620px) {
+    img {
+        width: 400px;
+        height: 300px;
+    } 
+
+    .footer {
+        margin-top: 15px;
+        width: 600px;
+    }
+}
+
+/* modal */
+
+.modal {
+    position: relative;
+    background-color: orange;
+    width: 90%;
+    margin: 10px auto;
+    transform: translate(0, 0);
+    max-width: 1000px;
+}
+
+.modal-body {
+    background-color: whitesmoke;
+    color: black;
+    padding-bottom: 25px;
+    margin: 0;
+}
+
+.modal h2 {
+    padding-top: 10px;
+}
+
+.get-some {
+    padding-top: 15px;
+}
+
+.get-all {
+    padding-top: 20px;
+}
+
+.modal footer {
+    padding-bottom: 1px;
+}
+
+.modal label, input  {
+    margin-bottom: 15px;
+}
+
+
+ .modal input[type="number"]  {
+    margin-top: 5px;
+    margin-right: 25px;
+    width: 100px;;
+}
+
+footer p {
+    text-align: center;
+}
+
+.list-header {
+    text-align: center;
+    background-color: lightseagreen;
+    margin-left: 15px;
+    margin-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 20px
+}
+
+.grat-list {
+    margin: 30px;
+}
+
+.modal ul {
+    padding: 10px;
+    text-align: left;
+}
+
+.modal hr {
+    border-bottom: 0;
+    margin: 10px 0 20px 0;
+}
+
+/* .update, .remove {
+    display: inline-block;
+    cursor: pointer;
+    width: 100px;
+    margin: 0 auto auto 15px;
+} */
+
+.modal .add-items {
+    background-color: lightseagreen;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.modal .form-control {
+    padding: 4px;
+    margin-top: 20px;
+}
+
+.modal .form-input {
+    padding: 4px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.js-list li {
+    padding: 0 5px 0 0;
+}
+
+.modal buttons {
+    width: 200px;
+}

@@ -1,12 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Daily Diary</title>
-</head>
-<body>
-    <h1>Hello World</h1>
-    <p>nodemon is working!</p>
-</body>
+    <head>
+        <meta charset="utf-8">
+        <title>Login | Daily Diary</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/generic.styles/grid.css">    
+        <link rel="stylesheet" href="/login/login.css">
+    </head>
+    <body>
+        <nav role="navigation">
+            <p>Don't have an account? <a href="/signup/signup.html"><strong>Sign up today.</strong></a></p>
+        </nav>
+        <header role="banner">
+            <h1>Daily Dose</h1>
+        </header>
+        <main role="main">
+             <form action="" method="GET">
+                <legend>Login</legend>                    
+                <input class="input" type="text" placeholder="email address">
+                <input class="input" type="text" placeholder="password">
+                <button class="btn" type="submit"><a href="/home/home.html">Sign In</a></button>
+                <p><a href="#">I forgot my password</a></p>                    
+            </form>
+        </main>
+           
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>       
+        <script type="text/javascript" src="/login/login.js"></script>
+    </body>
 </html>
