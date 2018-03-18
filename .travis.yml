@@ -7,3 +7,5 @@ deploy:
   app: tranquil-wave-50065
   on:
     repo: jpquense/daily-diary
+services:
+- mongodb

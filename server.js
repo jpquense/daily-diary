@@ -1,55 +1,105 @@
 'use strict';
+const throng = require('throng');
 const express = require('express');
+const bodyParser = require('body-parser');
 const morgan = require('morgan');
-
+const winston = require('winston');
+const mongoose = require('mongoose');
+const { router: userRouter } = require('./routers/user.router');
+const { router: gratitudesRouter } = require('./routers/gratitutdes.router');
+const { router: goalsRouter } = require('./routers/goals.router');
 
 const app = express();
 
-app.use(morgan('common'));
+mongoose.Promise = global.Promise;
 
-app.use(express.static('public'));
+const { PORT, DATABASE_URL, CONCURRENCY: WORKERS, ENV } = require('../config/main.config');
 
-app.get("/", (request, response) => {
-  response.sendFile(__dirname + '/public/login/login.html');
+// Middlewares
+// CORS
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  next();
 });
 
-// script startup
-let server;
+// Body Parser
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-function runServer() {
-    const port = process.env.PORT || 8080;
-    return new Promise((resolve, reject) => {
-      server = app.listen(port, () => {
-        console.log(`Your app is listening on port ${port}`);
-        resolve(server);
-      }).on('error', err => {
-        reject(err)
-      });
+// Logging
+morgan.token('processId', () => process.pid);
+if (ENV === 'development') {
+  app.use(morgan(':processId - :method :url :status :response-time ms - :res[content-length]'));
+}
+
+// Static Files
+app.use(express.static('public'));
+
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/public/login.html');
+});
+
+// Routes
+app.use('/api', usersRouter);
+app.use('/api', gratitudesRouter);
+app.use('/api', goalsRouter);
+
+app.get('/status', (req, res) => {
+  res.json({ processId: process.pid });
+});
+
+// Starting Scripts
+let server;
+function runServer(databaseUrl) {
+    return new Promise((res, rej) => {
+        mongoose.connect(databaseUrl, (err) => {
+            if (err) {
+                return rej(err);
+            }
+            if (ENV === 'development') {
+                winston.info(`Connected to ${databaseUrl}`);
+            } else {
+                winston.info('Connected to database');
+            }
+            server = app.listen(PORT, () => {
+                winston.info(`App is listening on port ${PORT}`);
+                winston.info(`App is running in ${ENV} environment`);
+                winston.info(`Worker process id: ${process.pid}`);
+                winston.info('=========================================');
+                res();
+            })
+            .on('error', (error) => {
+                mongoose.disconnect();
+                rej(error);
+            });
+            return server;
+        });
     });
-  }
-  
-  // like `runServer`, this function also needs to return a promise.
-  // `server.close` does not return a promise on its own, so we manually
-  // create one.
-  function closeServer() {
-    return new Promise((resolve, reject) => {
-      console.log('Closing server');
-      server.close(err => {
-        if (err) {
-          reject(err);
-          // so we don't also call `resolve()`
-          return;
-        }
-        resolve();
-      });
-    });
-  }
-  
-  // if server.js is called directly (aka, with `node server.js`), this block
-  // runs. but we also export the runServer command so other code (for instance, test code) can start the server as needed.
-  if (require.main === module) {
-    runServer().catch(err => console.error(err));
-  };
-  
-  module.exports = {app, runServer, closeServer};
-  
+}
+
+function closeServer() {
+  return mongoose.disconnect().then(() => (
+      new Promise((res, rej) => {
+          winston.info('Closing server.');
+          server.close((err) => {
+              if (err) {
+                  return rej(err);
+              }
+              return res();
+          });
+      })
+  ));
+}
+
+if (require.main === module) {
+  throng({
+      workers: WORKERS,
+      lifetime: Infinity,
+  }, () => {
+      runServer(DATABASE_URL).catch(err => winston.info(err));
+  });
+}
+
+module.exports = { app, runServer, closeServer };
