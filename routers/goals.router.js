@@ -1,18 +1,18 @@
 'use strict';
 
 const express = require('express');
-const Goals = require('../models/goals.model');
+const Goals = require('../models/goals.models');
 // const errorsParser = require('../helpers/errorsParser.helper');
 // const requiredFields = require('../middlewares/requiredFields.middleware');
 
 // Create API group routes
 const router = express.Router();
 
-router.route.get('/Goals', (req, res) => {
+router.get('/goals', (req, res) => {
     Goals
       .find()
-      .then(Goals => {
-        res.json(Goals.map(post => post.serialize()));
+      .then(goals => {
+        res.json(goals.map(goal => goal.serialize()));
       })
       .catch(err => {
         console.error(err);
@@ -20,7 +20,7 @@ router.route.get('/Goals', (req, res) => {
       });
   });
   
-  app.get('/Goals/:id', (req, res) => {
+  router.get('/Goals/:id', (req, res) => {
     Goals
       .findById(req.params.id)
       .then(post => res.json(post.serialize()))
@@ -30,7 +30,7 @@ router.route.get('/Goals', (req, res) => {
       });
   });
   
-  app.post('/Goals', (req, res) => {
+  router.post('/Goals', (req, res) => {
     const requiredFields = ['content', 'date'];
     for (let i = 0; i < requiredFields.length; i++) {
       const field = requiredFields[i];
@@ -55,7 +55,7 @@ router.route.get('/Goals', (req, res) => {
   });
   
   
-  app.delete('/Goals/:id', (req, res) => {
+  router.delete('/Goals/:id', (req, res) => {
     Goals
       .findByIdAndRemove(req.params.id)
       .then(() => {
@@ -68,7 +68,7 @@ router.route.get('/Goals', (req, res) => {
   });
   
   
-  app.put('/Goals/:id', (req, res) => {
+  router.put('/Goals/:id', (req, res) => {
     if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
       res.status(400).json({
         error: 'Request path id and request body id values must match'
@@ -90,7 +90,7 @@ router.route.get('/Goals', (req, res) => {
   });
   
   
-  app.delete('/:id', (req, res) => {
+  router.delete('/:id', (req, res) => {
     Goals
       .findByIdAndRemove(req.params.id)
       .then(() => {

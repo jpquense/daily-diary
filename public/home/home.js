@@ -4,26 +4,26 @@ const MOCK_GRATITUDES = {
 	"gratitudes": [
         {
             "id": "1111111",
-            "gratitude": "I am grateful for my friend taking me out to lunch.",
-            "publishedAt": 1470016976609,
+            "content": "I am grateful for my friend taking me out to lunch.",
+            "created": 1470016976609,
             "date": "2017-04-01"
         },
         {
             "id": "222222",
-            "gratitude": "I am grateful for my friend taking me out to lunch.",
-            "publishedAt": 1470016976609,
+            "content": "I am grateful for my friend taking me out to lunch.",
+            "created": 1470016976609,
             "date": "2017-04-20"
         },
         {
             "id": "333333",
-            "gratitude": "I am grateful for my friend taking me out to lunch.",
+            "content": "I am grateful for my friend taking me out to lunch.",
             "publishedAt": 1470016976609,
             "date": "2017-04-28"
         },
         {
             "id": "4444444",
-            "gratitude": "I am grateful for my friend taking me out to lunch.",
-            "publishedAt": 1470016976609,
+            "content": "I am grateful for my friend taking me out to lunch.",
+            "created": 1470016976609,
             "date": "2017-04-30"
         }
     ]
@@ -35,16 +35,20 @@ const MOCK_GRATITUDES = {
 // timeout function that returns mock data, it will 
 // use jQuery's AJAX functionality to make a call 
 // to the server and then run the callbackFn
-
-// GET client side ajax call
+// POST client side ajax call
 function getGratitudes(callbackFN) {
+    // we use a `setTimeout` to make this asynchronous
+    // as it will be with a real ajax call.
+        setTimeout(function() { callbackFN(MOCK_GRATITUDES)}, 100);
+}
+// GET client side ajax call
+function getAllGratitudes(callbackFN) {
     $.ajax({
-    	url: `https://your-api-url.com/api/posts/${postId}`,
-    	method: 'PUT',
+    	url: `https://tranquil-wave-50065.herokuapp.com/api/gratitudes`,
+    	method: 'GET',
       data: {
-      	title,
-        text,
-        author,
+      	content,
+        date,
       },
       success: () => {
       	console.log('Works!')
@@ -55,25 +59,91 @@ function getGratitudes(callbackFN) {
     })
 }
 
+function getGratitudesById(callbackFN) {
+    $.ajax({
+    	url: `https://tranquil-wave-50065.herokuapp.com/api/gratitudes/${gratitudeId}`,
+    	method: 'GET',
+      data: {
+      	content,
+        date,
+      },
+      success: () => {
+      	console.log('Works!')
+      },
+      error: () => {
+      	console.log('I get an error :/')
+      }
+    })
+}
+
+function getGratitudesByDate(callbackFN) {
+    $.ajax({
+    	url: `https://tranquil-wave-50065.herokuapp.com/api/gratitudes/${gratitudeDate}`,
+    	method: 'GET',
+      data: {
+      	content,
+        date,
+      },
+      success: () => {
+      	console.log('Works!')
+      },
+      error: () => {
+      	console.log('I get an error :/')
+      }
+    })
+}
 // POST client side ajax call
 function postGratitudes(callbackFN) {
-    // we use a `setTimeout` to make this asynchronous
-    // as it will be with a real ajax call.
-        setTimeout(function() { callbackFN(MOCK_GRATITUDES)}, 100);
+    $.ajax({
+    	url: `https://tranquil-wave-50065.herokuapp.com/api/gratitudes/posts/${gratitudeId}`,
+    	method: 'POST',
+      data: {
+      	content,
+        date,
+      },
+      success: () => {
+      	console.log('Works!')
+      },
+      error: () => {
+      	console.log('I get an error :/')
+      }
+    })
 }
 
 // PUT client side ajax call
 function putGratitudes(callbackFN) {
-    // we use a `setTimeout` to make this asynchronous
-    // as it will be with a real ajax call.
-        setTimeout(function() { callbackFN(MOCK_GRATITUDES)}, 100);
+    $.ajax({
+    	url: `https://tranquil-wave-50065.herokuapp.com/api/gratitudes/${gratitudeId}`,
+    	method: 'PUT',
+      data: {
+      	content,
+        date,
+      },
+      success: () => {
+      	console.log('Works!')
+      },
+      error: () => {
+      	console.log('I get an error :/')
+      }
+    })
 }
 
 // DELETE client side ajax call
-function deleteGratitudes(callbackFN) {
-    // we use a `setTimeout` to make this asynchronous
-    // as it will be with a real ajax call.
-        setTimeout(function() { callbackFN(MOCK_GRATITUDES)}, 100);
+function deleteGratitudesById(callbackFN) {
+    $.ajax({
+    	url: `https://tranquil-wave-50065.herokuapp.com/api/gratitudes/${gratitudeId}`,
+    	method: 'DELETE',
+      data: {
+      	content,
+        date,
+      },
+      success: () => {
+      	console.log('Works!')
+      },
+      error: () => {
+      	console.log('I get an error :/')
+      }
+    })
 }
 
 // display functions
@@ -81,7 +151,6 @@ function displayGratitudesModal(data) {
     const listLength = data.gratitudes.length;
     const minDate = data.gratitudes[0].date;
     const maxDate = data.gratitudes[data.gratitudes.length - 1].date;
-console.log(minDate, maxDate)
     $('.js-modal').html(`
         <header>
         <h2 class="js-modal-header">I am grateful for . . . </h2>
@@ -132,10 +201,10 @@ function displayGratitudesList(data) {
     data.gratitudes.forEach((element, index) => {
         const date = element.date;
         const id = element.id;
-        const gratitude = element.gratitude
+        const content = element.content
         console.log(date, id, content);
         $('.js-list').append(`
-        <li class="" data-index="${index}" data-id="${id}">I am grateful for ${gratitude} <br>${date}
+        <li class="" data-index="${index}" data-id="${id}">I am grateful for ${content} <br>${date}
             <div>
                 <button class="js-update-btn">Update</button>
                 <button>Delete</button>
@@ -164,7 +233,7 @@ function getAndDisplayGratitudesModal() {
 	getGratitudes(displayGratitudesModal);
 }
 
-function getAndDisplayGratitudesList() {
+function getAndDisplayAllGratitudes() {
 	getGratitudes(displayGratitudesList);
 }
 
@@ -186,7 +255,7 @@ $('.modal').on('click', '.js-modal-btn-exit', function() {
 
 // get and display all gratitudes
 $('.modal').on('click', '.js-modal-btn-all', function() {
-    getAndDisplayGratitudesList();
+    getAndDisplayAllGratitudes();
 }); 
 
 // close gratitudes list

@@ -1,6 +1,8 @@
 'use strict';
 
 const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
+
 const uniqueValidator = require('mongoose-unique-validator');
 
 const GratitudesSchema = new mongoose.Schema({
@@ -29,4 +31,6 @@ GratitudesSchema.methods.serialize = function() {
   };
 };
 
-module.exports = mongoose.model('Gratitudes', GratitudesSchema);
+const Gratitudes = mongoose.model('Gratitudes', GratitudesSchema);
+
+module.exports = { Gratitudes };

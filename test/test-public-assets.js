@@ -5,7 +5,7 @@ const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
 
 const { app, closeServer, runServer } = require('../server');
-const { TEST_DATABASE_URL } = require('../config');
+const { TEST_DATABASE_URL } = require('../config/config');
 
 
 const expect = chai.expect;
@@ -19,7 +19,7 @@ describe('login.html page', function() {
     after(function() {
         return closeServer();
     });
-    it('should return signup.html and 200 status', function() {
+    it('should return login.html and 200 status', function() {
         return chai.request(app)
             .get('/')
             .then(function(res) {
