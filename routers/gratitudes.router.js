@@ -4,10 +4,6 @@ const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 const { Gratitudes } = require('../models/gratitudes.models');
 
-
-// const errorsParser = require('../helpers/errorsParser.helper');
-// const requiredFields = require('../middlewares/requiredFields.middleware');
-
 // Create API group routes
 
 router.get('/gratitudes', (req, res) => {
@@ -23,10 +19,10 @@ router.get('/gratitudes', (req, res) => {
       });
   });
   
-router.get('gratitudes/:id', (req, res) => {
+router.get('/gratitudes/:id', (req, res) => {
   Gratitudes
     .findById(req.params.id)
-    .then(post => res.json(post.serialize()))
+    .then(gratitude => res.json(gratitude.serialize()))
     .catch(err => {
       console.error(err);
       res.status(500).json({ error: 'something went horribly awry' });
@@ -58,10 +54,11 @@ router.post('/gratitudes', (req, res) => {
 });
 
 
-router.delete('gratitudes/:id', (req, res) => {
+router.delete('/gratitudes/:id', (req, res) => {
   Gratitudes
     .findByIdAndRemove(req.params.id)
     .then(() => {
+      console.log(`Deleted gratitude with id \`${req.params.id}\``);
       res.status(204).json({ message: 'success' });
     })
     .catch(err => {
@@ -70,59 +67,28 @@ router.delete('gratitudes/:id', (req, res) => {
     });
 });
 
-
-router.put('gratitudes/:id', (req, res) => {
+router.put('/gratitudes/:id', (req, res) => {
   if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
-    res.status(400).json({
-      error: 'Request path id and request body id values must match'
-    });
+    const message = (
+      `Request path id (${req.params.id}) and request body id ` +
+      `(${req.body.id}) must match`);
+    console.error(message);
+    return res.status(400).json({ message: message });
   }
+  const toUpdate = {};
+  const updateableFields = ['content', 'date'];
 
-  const updated = {};
-  const updateableFields = ['date', 'content'];
   updateableFields.forEach(field => {
     if (field in req.body) {
-      updated[field] = req.body[field];
+      toUpdate[field] = req.body[field];
     }
   });
 
   Gratitudes
-    .findByIdAndUpdate(req.params.id, { $set: updated }, { new: true })
-    .then(updatedPost => res.status(204).end())
-    .catch(err => res.status(500).json({ message: 'Something went wrong' }));
+    // all key/value pairs in toUpdate will be updated -- that's what `$set` does
+    .findByIdAndUpdate(req.params.id, { $set: toUpdate })
+    .then(gratitude => res.status(204).end())
+    .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
-
-
-router.delete('/:id', (req, res) => {
-  Gratitudes
-    .findByIdAndRemove(req.params.id)
-    .then(() => {
-      console.log(`Deleted blog post with id \`${req.params.id}\``);
-      res.status(204).end();
-    });
-});
-
-
-// router.route('/recipes')
-//     .post(requiredFields('name', 'ingredients'), (req, res) => {
-//         Recipes.create({
-//             name: req.body.name,
-//             ingredients: req.body.ingredients,
-//         })
-//         .then(() => res.status(201).send())
-//         .catch(report => res.status(400).json(errorsParser.generateErrorResponse(report)));
-//     })
-//     .get((req, res) => {
-//         Recipes.find()
-//         .populate('ingredients.ingredient', 'name')
-//         .then(recipes => res.json(recipes));
-//     });
-
-// router.route('/recipes/:id')
-//     .get((req, res) => {
-//         Recipes.findById(req.params.id)
-//         .populate('ingredients.ingredient', 'name')
-//         .then(recipe => res.json(recipe));
-//     });
 
 module.exports = router;

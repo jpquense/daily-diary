@@ -54,6 +54,10 @@ app.get('/status', (req, res) => {
   res.json({ processId: process.pid });
 });
 
+app.use('*', function (req, res) {
+    res.status(404).json({ message: 'Not Found' });
+  });
+
 // Starting Scripts
 // let server;
 // function runServer(databaseUrl) {
