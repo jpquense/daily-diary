@@ -26,7 +26,7 @@ function tearDownDb() {
 // generate placeholder values for date, content
 // and then we insert that data into mongo
 function seedGratitudesData() {
-  console.info('seeding blog gratitude data');
+  console.info('seeding gratitude data');
   const seedData = [];
   for (let i = 1; i <= 10; i++) {
     seedData.push({

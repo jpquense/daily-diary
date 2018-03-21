@@ -7,9 +7,9 @@ const mongoose = require('mongoose');
 
 const should = chai.should();
 
-const { Goals } = require('../models/goals.model');
+const { Goals } = require('../models/goals.models');
 const { closeServer, runServer, app } = require('../server');
-const { TEST_DATABASE_URL } = require('../config/main.config');
+const { TEST_DATABASE_URL } = require('../config/config');
 
 chai.use(chaiHttp);
 
@@ -23,26 +23,26 @@ function tearDownDb() {
   });
 }
 
-// generate placeholder values for author, title, content
+// generate placeholder values for date, content
 // and then we insert that data into mongo
-function seedgoalsData() {
-  console.info('seeding blog goal data');
+function seedGoalsData() {
+  console.info('seeding goal data');
   const seedData = [];
   for (let i = 1; i <= 10; i++) {
     seedData.push({
       content: faker.lorem.sentence(),
-      date: Date.random() || Date.now()
+      date: Date.now() || "2018-2-15"
     });
   }
-  return goals.insertMany(seedData);
+  return Goals.insertMany(seedData);
 }
 
-describe('goals API resource', function () {
+describe('Goals API resource', function () {
   before(function () {
     return runServer(TEST_DATABASE_URL);
   });
   beforeEach(function () {
-    return seedgoalsData();
+    return seedGoalsData();
   });
   afterEach(function () {
     return tearDownDb();
@@ -55,23 +55,25 @@ describe('goals API resource', function () {
     it('should return all existing goals', function () {
       let res;
       return chai.request(app)
-        .get('/goals')
+        .get('/api/goals')
         .then(_res => {
           res = _res;
           res.should.have.status(200);
           res.body.should.have.length.of.at.least(1);
-          return goals.count();
+
+          return Goals.count();
         })
         .then(count => {
-          res.body.should.have.length.of(count);
+          res.body.should.have.length.of.at.least(10);
+          // res.body.should.have.length.of(count);
         });
     });
 
     it('should return goals with right fields', function () {
-      // Strategy: Get back all goals, and ensure they have expected keys
-      let resgoal;
+      // Strategy: Get back all Goals, and ensure they have expected keys
+      let resGoal;
       return chai.request(app)
-        .get('/goals')
+        .get('/api/goals')
         .then(function (res) {
 
           res.should.have.status(200);
@@ -81,15 +83,15 @@ describe('goals API resource', function () {
 
           res.body.forEach(function (goal) {
             goal.should.be.a('object');
-            goal.should.include.keys('id', 'date', 'content', 'created');
+            goal.should.include.keys('id', 'date', 'content');
           });
 
-          resgoal = res.body[0];
-          return goals.findById(resgoal.id);
+          resGoal = res.body[0];
+          return Goals.findById(resGoal.id);
         })
         .then(goal => {
-          resgoal.title.should.equal(goal.date);
-          resgoal.content.should.equal(goal.content);
+          // resGoal.date.should.equal(goal.date);
+          resGoal.content.should.equal(goal.content);
         });
     });
   });
@@ -97,59 +99,58 @@ describe('goals API resource', function () {
   describe('goal endpoint', function () {
     it('should add a new goal', function () {
 
-      const newgoal = {
-        date: faker.lorem.text(),
+      const newGoal = {
+        date: "2016-10-20",
         content: faker.lorem.text()
       };
 
       return chai.request(app)
-        .goal('/goals')
-        .send(newgoal)
+        .post('/api/goals')
+        .send(newGoal)
         .then(function (res) {
           res.should.have.status(201);
           res.should.be.json;
           res.body.should.be.a('object');
           res.body.should.include.keys(
-            'id', 'date', 'content', 'created');
-          res.body.date.should.equal(newgoal.date);
+            'id', 'date', 'content');
+          // res.body.date.should.equal(newGoal.date);
           res.body.id.should.not.be.null;
-          res.body.content.should.equal(newgoal.content);
-          return goals.findById(res.body.id);
+          res.body.content.should.equal(newGoal.content);
+          return Goals.findById(res.body.id);
         })
         .then(function (goal) {
-          goal.date.should.equal(newgoal.date);
-          goal.content.should.equal(newgoal.content);
+          // goal.date.should.equal(newGoal.date);
+          goal.content.should.equal(newGoal.content);
         });
     });
   });
 
   describe('PUT endpoint', function () {
-
     // strategy:
     //  1. Get an existing goal from db
     //  2. Make a PUT request to update that goal
     //  4. Prove goal in db is correctly updated
     it('should update fields you send over', function () {
       const updateData = {
-        date: Date.now(),
+        date: "2016-10-20",
         content: 'dogs dogs dogs'
       };
 
-      return goals
+      return Goals
         .findOne()
         .then(goal => {
           updateData.id = goal.id;
 
           return chai.request(app)
-            .put(`/goals/${goal.id}`)
+            .put(`/api/goals/${goal.id}`)
             .send(updateData);
         })
         .then(res => {
           res.should.have.status(204);
-          return goals.findById(updateData.id);
+          return Goals.findById(updateData.id);
         })
         .then(goal => {
-          goal.date.should.equal(updateData.date);
+          // goal.date.should.equal(updateData.date);
           goal.content.should.equal(updateData.content);
         });
     });
@@ -165,15 +166,15 @@ describe('goals API resource', function () {
 
       let goal;
 
-      return goals
+      return Goals
         .findOne()
         .then(_goal => {
           goal = _goal;
-          return chai.request(app).delete(`/goals/${goal.id}`);
+          return chai.request(app).delete(`/api/goals/${goal.id}`);
         })
         .then(res => {
           res.should.have.status(204);
-          return goals.findById(goal.id);
+          return Goals.findById(goal.id);
         })
         .then(_goal => {
           // when a variable's value is null, chaining `should`

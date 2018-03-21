@@ -1,6 +1,8 @@
 'use strict';
 
 const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
+
 const uniqueValidator = require('mongoose-unique-validator');
 
 const GoalsSchema = new mongoose.Schema({
@@ -29,4 +31,6 @@ GoalsSchema.methods.serialize = function() {
   };
 };
 
-module.exports = mongoose.model('Goals', GoalsSchema);
+const Goals = mongoose.model('Goals', GoalsSchema);
+
+module.exports = { Goals };

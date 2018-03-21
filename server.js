@@ -7,7 +7,7 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 // const { router: userRouter } = require('./routers/user.router');
 const gratitudesRouter = require('./routers/gratitudes.router');
-// const goalsRouter = require('./routers/goals.router');
+const goalsRouter = require('./routers/goals.router');
 
 const app = express();
 
@@ -48,7 +48,7 @@ app.get('/', (req, res) => {
 // Routes
 // app.use('/api', usersRouter);
 app.use('/api', gratitudesRouter);
-// app.use('/api', goalsRouter);
+app.use('/api', goalsRouter);
 
 app.get('/status', (req, res) => {
   res.json({ processId: process.pid });
