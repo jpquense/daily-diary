@@ -1,22 +1,27 @@
+
 'use strict';
 
-require('dotenv').config();
 const express = require('express');
-const bodyParser = require('body-parser');
-const morgan = require('morgan');
 const mongoose = require('mongoose');
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
 const passport = require('passport');
 
-const { router: usersRouter } = require('..routers/users/users.router');
-const { router: authRouter, localStrategy, jwtStrategy } = require('./routers/auth.routers');
-const gratitudesRouter = require('./routers/gratitudes.router');
-const goalsRouter = require('./routers/goals.router');
+const { PORT, DATABASE_URL } = require('./config');
+
+const { Goals } = require('./goals/models');
+const { Gratitudes } = require('./gratitudes/models');
+const { User } = require('./users/models');
+
+const {router: userRouter} = require('./users/router');
+const {router: goalsRouter} = require('./goals/router');
+const {router: gratitudesRouter} = require('./gratitudes/router');
+const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
 
 const app = express();
 
 mongoose.Promise = global.Promise;
-
-const { DATABASE_URL, PORT } = require('./config/config');
 
 app.use(morgan('common'));
 
@@ -42,56 +47,48 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/login/login.html');
 });
 
+// Authentication strategies
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 // Routes
-app.use('/api/users/', usersRouter);
-app.use('/api/auth/', authRouter);
-app.use('/api', gratitudesRouter);
 app.use('/api', goalsRouter);
-
-// A protected endpoint which needs a valid JWT to access it
-app.get('/api/protected', jwtAuth, (req, res) => {
-  return res.json({
-    data: 'rosebud'
-  });
-});
-
+app.use('/api', gratitudesRouter);
+app.use('/api', userRouter);
+app.use('/api', authRouter);
 // if endpoint does not exist
 app.use('*', function (req, res) {
     res.status(404).json({ message: 'Not Found' });
   });
 
-// Referenced by both runServer and closeServer. closeServer
-// assumes runServer has run and set `server` to a server object
+// Run and close Server
 let server;
 
-function runServer() {
-  return new Promise((resolve, reject) => {
-    mongoose.connect(DATABASE_URL, { useMongoClient: true }, err => {
+function runServer(databaseUrl = DATABASE_URL, port) {
+
+  return new Promise ((resolve, reject) => {
+    mongoose.connect(databaseUrl, err => {
       if (err) {
         return reject(err);
       }
-      server = app
-        .listen(PORT, () => {
-          console.log(`Your app is listening on port ${PORT}`);
-          resolve();
-        })
-        .on('error', err => {
-          mongoose.disconnect();
-          reject(err);
-        });
+      server = app.listen(port = (process.env.PORT || 8080), () => {
+        console.log(`Your app is listening on port ${port}`);
+        resolve();
+      })
+      .on('error', err => {
+        mongoose.disconnect();
+        reject(err);
+      });
     });
   });
 }
 
 function closeServer() {
   return mongoose.disconnect().then(() => {
-    return new Promise((resolve, reject) => {
-      console.log('Closing server');
+    return new Promise(function(resolve, reject) {
+      console.log(`Closing server`);
       server.close(err => {
-        if (err) {
+        if(err) {
           return reject(err);
         }
         resolve();
@@ -100,8 +97,8 @@ function closeServer() {
   });
 }
 
-if (require.main === module) {
-  runServer().catch(err => console.error(err));
+if(require.main === module) {
+  runServer(DATABASE_URL).catch(err => console.error(err));
 }
 
 module.exports = { app, runServer, closeServer };

@@ -22,6 +22,7 @@ describe('/api/user', function() {
   const passwordB = 'examplePassB';
   const firstNameB = 'ExampleB';
   const lastNameB = 'UserB';
+  const email = 'example@email.com'
 
   before(function() {
     return runServer();
@@ -44,6 +45,8 @@ describe('/api/user', function() {
           .request(app)
           .post('/api/users')
           .send({
+            email,
+            username,
             password,
             firstName,
             lastName
@@ -68,7 +71,9 @@ describe('/api/user', function() {
           .request(app)
           .post('/api/users')
           .send({
+            email,
             username,
+            password,
             firstName,
             lastName
           })
@@ -95,7 +100,8 @@ describe('/api/user', function() {
             username: 1234,
             password,
             firstName,
-            lastName
+            lastName,
+            email,
           })
           .then(() =>
             expect.fail(null, null, 'Request should not succeed')
@@ -122,7 +128,8 @@ describe('/api/user', function() {
             username,
             password: 1234,
             firstName,
-            lastName
+            lastName,
+            email
           })
           .then(() =>
             expect.fail(null, null, 'Request should not succeed')
@@ -149,7 +156,8 @@ describe('/api/user', function() {
             username,
             password,
             firstName: 1234,
-            lastName
+            lastName,
+            email
           })
           .then(() =>
             expect.fail(null, null, 'Request should not succeed')
@@ -174,6 +182,7 @@ describe('/api/user', function() {
           .post('/api/users')
           .send({
             username,
+            email,
             password,
             firstName,
             lastName: 1234
@@ -203,7 +212,8 @@ describe('/api/user', function() {
             username: ` ${username} `,
             password,
             firstName,
-            lastName
+            lastName,
+            email
           })
           .then(() =>
             expect.fail(null, null, 'Request should not succeed')
@@ -230,7 +240,8 @@ describe('/api/user', function() {
             username,
             password: ` ${password} `,
             firstName,
-            lastName
+            lastName,
+            email
           })
           .then(() =>
             expect.fail(null, null, 'Request should not succeed')
@@ -257,7 +268,8 @@ describe('/api/user', function() {
             username: '',
             password,
             firstName,
-            lastName
+            lastName,
+            email
           })
           .then(() =>
             expect.fail(null, null, 'Request should not succeed')
@@ -284,7 +296,8 @@ describe('/api/user', function() {
             username,
             password: '123456789',
             firstName,
-            lastName
+            lastName,
+            email
           })
           .then(() =>
             expect.fail(null, null, 'Request should not succeed')
@@ -336,7 +349,8 @@ describe('/api/user', function() {
           username,
           password,
           firstName,
-          lastName
+          lastName,
+          email
         })
           .then(() =>
             // Try to create a second user with the same username
@@ -344,7 +358,8 @@ describe('/api/user', function() {
               username,
               password,
               firstName,
-              lastName
+              lastName,
+              email
             })
           )
           .then(() =>
@@ -372,7 +387,8 @@ describe('/api/user', function() {
             username,
             password,
             firstName,
-            lastName
+            lastName,
+            email
           })
           .then(res => {
             expect(res).to.have.status(201);
@@ -380,7 +396,8 @@ describe('/api/user', function() {
             expect(res.body).to.have.keys(
               'username',
               'firstName',
-              'lastName'
+              'lastName',
+              'email'
             );
             expect(res.body.username).to.equal(username);
             expect(res.body.firstName).to.equal(firstName);
@@ -406,6 +423,7 @@ describe('/api/user', function() {
           .send({
             username,
             password,
+            email,
             firstName: ` ${firstName} `,
             lastName: ` ${lastName} `
           })
@@ -415,8 +433,10 @@ describe('/api/user', function() {
             expect(res.body).to.have.keys(
               'username',
               'firstName',
-              'lastName'
+              'lastName',
+              'email'
             );
+            expect(res.body.email).to.equal(email);
             expect(res.body.username).to.equal(username);
             expect(res.body.firstName).to.equal(firstName);
             expect(res.body.lastName).to.equal(lastName);
@@ -446,13 +466,15 @@ describe('/api/user', function() {
             username,
             password,
             firstName,
-            lastName
+            lastName,
+            email
           },
           {
             username: usernameB,
             password: passwordB,
             firstName: firstNameB,
-            lastName: lastNameB
+            lastName: lastNameB,
+            email: emailB
           }
         )
           .then(() => chai.request(app).get('/api/users'))
@@ -463,12 +485,14 @@ describe('/api/user', function() {
             expect(res.body[0]).to.deep.equal({
               username,
               firstName,
-              lastName
+              lastName,
+              email
             });
             expect(res.body[1]).to.deep.equal({
               username: usernameB,
               firstName: firstNameB,
-              lastName: lastNameB
+              lastName: lastNameB,
+              email: emailB
             });
           });
       });
