@@ -11,8 +11,9 @@ mongoose.Promise = global.Promise;
 const { Gratitude } = require('./models');
 
 const jwtAuth = passport.authenticate('jwt', {session: false});
-// Create API group routes
 
+// Create API group routes
+// Get all gratitudes for one user
 router.get('/gratitudes', jwtAuth, (req, res) => {
   Gratitude
     .find({author: req.user._id})
@@ -23,46 +24,37 @@ router.get('/gratitudes', jwtAuth, (req, res) => {
       res.status(500).json({ message: 'Internal server error' });
     });
   });
-  
+   // Get one gratitude with _id 
 router.get('/gratitudes/:id', jwtAuth, (req, res) => {
   Gratitude
     .findById(req.params.id)
-    .then(gratitude => res.json(gratitude.serialize()))
+    .then(gratitude => res.json(gratitude))
     .catch(err => {
       console.error(err);
-      res.status(500).json({ error: 'something went horribly awry' });
+      res.status(500).json({ error: 'Unable to find gratitude, contact Internal server manager' });
     });
 });
-
-router.post('/gratitudes', jwtAuth, requiredFields('gratitude', 'date'), (req, res) => {
+// Create new gratitude
+router.post('/gratitudes', jwtAuth, requiredFields('gratitude'), (req, res) => {
   Gratitude
     .create({
       gratitude: req.body.gratitude,
-      date: req.body.date
+      author: req.user._id
     })
     .then(gratitude => res.status(201).json(gratitude))
     .catch(err => {
       console.error(err);
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal server error, unable to post new gratitude' });
     });
 });
-
+// Change existing gratitude with _id
 router.put('/gratitudes/:id', jwtAuth, (req, res) => {
-  const toUpdate = {};
-  const updateableFields = ['gratitude', 'date'];
-
-  updateableFields.forEach(field => {
-    if (field in req.body) {
-      toUpdate[field] = req.body[field];
-    }
-  });
-
   Gratitude
-    .findByIdAndUpdate(req.params.id, { $set: toUpdate })
-    .then(updatedgratitude => res.status(204).end())
+  .findByIdAndUpdate(req.params.id, {$set: { gratitude: `${req.body.gratitude}`}})
+  .then(updatedGratitude => res.json(updatedGratitude))
     .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
-
+// Delete existing goal with _id
 router.delete('/gratitudes/:id', jwtAuth, (req, res) => {
   Gratitude
     .findByIdAndRemove(req.params.id)
@@ -72,7 +64,7 @@ router.delete('/gratitudes/:id', jwtAuth, (req, res) => {
     })
     .catch(err => {
       console.error(err);
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal server error, unable to delet gratitude' });
     });
 });
 

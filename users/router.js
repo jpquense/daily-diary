@@ -14,7 +14,7 @@ const localStrategy = require('../auth/strategies');
 const router = express.Router();
 
 // Create new user
-router.route('/user')
+router.route('/users')
   .post(disableWithToken, requiredFields('firstName', 'username', 'password', 'lastName', 'email'), (req, res) => {
     User.find({username: req.body.username})
     .count()
@@ -50,11 +50,17 @@ router.route('/user')
     });
   });
 
+const jwtAuth = passport.authenticate('jwt', {session: false});
 
-router.route('/user')
-  .get(passport.authenticate('jwt', { session: false }), (req, res) => {
-    res.status(200).json(req.user)
-    .catch(err => res.status(500).json({message: 'Internal server error'}));
+router.get('/users', jwtAuth, (req, res) => {
+  User
+  .find()
+  .sort({createdAt: 'desc'})
+  .then(users => res.json(users))
+  .catch(err => {
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
   });
+});  
 
 module.exports = {router};

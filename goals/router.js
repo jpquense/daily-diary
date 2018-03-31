@@ -11,8 +11,9 @@ mongoose.Promise = global.Promise;
 const { Goal } = require('./models');
 
 const jwtAuth = passport.authenticate('jwt', {session: false});
-// Create API group routes
 
+// Create API group routes
+// Get all goals for one user
 router.get('/goals', jwtAuth, (req, res) => {
     Goal
     .find({author: req.user._id})
@@ -23,46 +24,37 @@ router.get('/goals', jwtAuth, (req, res) => {
       res.status(500).json({ message: 'Internal server error' });
     });
   });
-  
+ // Get one goal with _id 
 router.get('/goals/:id', jwtAuth, (req, res) => {
   Goal
     .findById(req.params.id)
-    .then(goal => res.json(goal.serialize()))
+    .then(goal => res.json(goal))
     .catch(err => {
       console.error(err);
-      res.status(500).json({ error: 'something went horribly awry' });
+      res.status(500).json({ error: 'Unable to find goal, contact Internal server manager' });
     });
 });
-
-router.post('/goals', jwtAuth, requiredFields('goal', 'date'), (req, res) => {
+// Create new goal
+router.post('/goals', jwtAuth, requiredFields('goal'), (req, res) => {
   Goal
     .create({
       goal: req.body.goal,
-      date: req.body.date
+      author: req.user._id 
     })
     .then(goal => res.status(201).json(goal))
     .catch(err => {
       console.error(err);
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal server error, unable to post new goal' });
     });
 });
-
+// Change existing goal with _id
 router.put('/goals/:id', jwtAuth, (req, res) => {
-  const toUpdate = {};
-  const updateableFields = ['goal', 'date'];
-
-  updateableFields.forEach(field => {
-    if (field in req.body) {
-      toUpdate[field] = req.body[field];
-    }
-  });
-
   Goal
-    .findByIdAndUpdate(req.params.id, { $set: toUpdate })
-    .then(updatedGoal => res.status(204).end())
+  .findByIdAndUpdate(req.params.id, {$set: { goal: `${req.body.goal}`}})
+  .then(updatedGoal => res.json(updatedGoal))
     .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
-
+// Delete existing goal with _id
 router.delete('/goals/:id', jwtAuth, (req, res) => {
   Goal
     .findByIdAndRemove(req.params.id)
@@ -72,7 +64,7 @@ router.delete('/goals/:id', jwtAuth, (req, res) => {
     })
     .catch(err => {
       console.error(err);
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal server error, unable to delete gratitude' });
     });
 });
 

@@ -10,11 +10,11 @@ const passport = require('passport');
 
 const { PORT, DATABASE_URL } = require('./config');
 
-const { Goals } = require('./goals/models');
-const { Gratitudes } = require('./gratitudes/models');
+const { Goal } = require('./goals/models');
+const { Gratitude } = require('./gratitudes/models');
 const { User } = require('./users/models');
 
-const {router: userRouter} = require('./users/router');
+const {router: usersRouter} = require('./users/router');
 const {router: goalsRouter} = require('./goals/router');
 const {router: gratitudesRouter} = require('./gratitudes/router');
 const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
@@ -44,7 +44,7 @@ app.use(morgan('common'));
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/login/login.html');
+    res.sendFile(__dirname + '/public/login.html');
 });
 
 // Authentication strategies
@@ -54,7 +54,7 @@ passport.use(jwtStrategy);
 // Routes
 app.use('/api', goalsRouter);
 app.use('/api', gratitudesRouter);
-app.use('/api', userRouter);
+app.use('/api', usersRouter);
 app.use('/api', authRouter);
 // if endpoint does not exist
 app.use('*', function (req, res) {

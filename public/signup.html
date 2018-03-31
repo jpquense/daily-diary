@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Signup | Daily Diary</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Daily Diary is an application that easily enables us to journal our goals and gratitudes.">
+        <!-- CSS Styling -->
+        <link rel="stylesheet" href="/css/grid.css">
+        <link rel="stylesheet" href="/css/signup.css">
+    </head>
+    <body>
+        <nav role="navigation">
+            <p>Already have an account? <a href="/"><strong>Login</strong></a></p>
+        </nav>
+        <header role="banner">
+            <h1>Daily Diary</h1>
+        </header>
+        <section role="region">
+            <h2>Gratitudes and Goals</h2>
+            <p>It is that simply</p>
+            <p>Positive psychology has found over and over again that taking time each day<br>
+            to be grateful and set attainable goals will change our experience of life for the better!</p>
+            <p>What are you grateful for?</p>
+            <p>What would you like to achieve?</p>
+            <p>Change your life for the better with your own Daily Diary!</p>
+        </section>
+        <main role="main">
+            <div id="signup-form"></div>
+            <form action="" method="GET" id="js-form-signup">
+                 <fieldset>
+                    <legend>Create Account</legend>
+                    
+                    <label for="js-signup-firstName" class="black-text"><strong>First name</strong></label>                    
+                    <input id="js-signup-firstName" class="input" type="text" placeholder="first name" required>
+
+                    <label for="js-signup-lastName" class="black-text"><strong>Last name</strong></label>                    
+                    <input id="js-signup-lastName" class="input" type="text" placeholder="last name" required>
+
+                    <label for="js-signup-username" class="black-text"><strong>Username</strong></label>                    
+                    <input id="js-signup-username" class="input" type="text" placeholder="username" required>
+
+                    <label for="js-signup-email" class="black-text"><strong>Email address</strong></label>                    
+                    <input id="js-signup-email" class="input" type="text" placeholder="email address" required>
+
+                    <label for="js-signup-password" class="black-text"><strong>Password</strong><em>- at least 8 characters</em></label> 
+                    <input id="js-signup-password" class="input" type="text" placeholder="password" required>
+
+                    <p>Password tip: Create a password using four random words. <br>It's easy to remember, but hard to crack.</p>
+                    <button class="btn" type="submit">Create Account</button>
+                </fieldset>
+            </form>
+        </main>
+        <section role="region">
+            <h3>Limited time offer</h3>
+            <p>Signup for a free account during our beta release. Track your goals and gratitudes like a boss!</p>
+        </section>
+        <footer role="contentinfo">
+            <span>Copyright &copy; 2018 <a href="https://github.com/jpquense" target="_blank">John P Quense</a> All Rights Reserved.</span>
+          </footer>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>       
+        <script type="text/javascript" src="/js/users.js"></script>
+    </body>
+</html>

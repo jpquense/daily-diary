@@ -87,3 +87,23 @@ form p {
     color: white;
     background-color: black;
 }
+
+.sign-up-success,
+.sign-up-failure {
+  height: 100%;
+  font-size: 15px;
+  width: 300px;
+  margin: 0 auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  color: red;
+}
+.sign-up-success a,
+#sign-up-title a {
+  text-decoration: none;
+  color: #5D398F;
+}
+.sign_up_success a:hover,
+#sign-up-title a:hover {
+  text-decoration: underline;
+}

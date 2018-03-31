@@ -7,12 +7,12 @@ const config = require('../config');
 const router = express.Router();
 const disableWithToken = require('../middleware/disableWithToken').disableWithToken;
 const requiredFields = require('../middleware/requiredFields');
-const { localStrategy, jwtStrategy } = require('./');
 
 const createAuthToken = user => {
   return jwt.sign({
     user: {
       _id: user._id,
+      lastName: user.lastName,
       username: user.username,
       firstName: user.firstName,
       email: user.email,
@@ -27,7 +27,7 @@ const createAuthToken = user => {
 const localAuth = passport.authenticate('local', { session: false });
 
 // Get jwt token at login in exhange for username and password using local authentication
-router.post('/login', disableWithToken, requiredFields('username', 'password'), localAuth, (req,res) => {
+router.post('/login', disableWithToken, requiredFields('email', 'password'), localAuth, (req,res) => {
   const authToken = createAuthToken(req.user);
   res.json({authToken});
 });

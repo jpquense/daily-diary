@@ -54,10 +54,9 @@ form a {
     text-decoration: none;
 }
 
-form p {
-    
+form p, legend, h2 {
     color: green;
-    font-size: 12px;
+    font-size: 18px;
 }
 
 .password {
@@ -87,4 +86,15 @@ form p {
     cursor: pointer;
     color: white;
     background-color: black;
+}
+
+.alert {
+    font-weight: 700;
+    font-size: 17px;
+    margin-bottom: 15px;
+    color: red;
+  }
+
+.hidden {
+    visibility: hidden;
 }
