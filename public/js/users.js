@@ -16,7 +16,6 @@ function newUser() {
 }
 
 function postNewUser (firstName, lastName, username, email, password) {
-    console.log(firstName, lastName, username, email, password);
     $('.sign-up-failure').remove();
     $.ajax({
         url: '/api/users',
@@ -65,7 +64,7 @@ function returningUser(email, password) {
 
 function postReturningUser(email, password) {
     $.ajax({
-        url:'/auth/login',
+        url:'/api/login',
         type: 'POST',
         dataType: 'json',
         contentType: 'application/json',
@@ -77,7 +76,7 @@ function postReturningUser(email, password) {
             successToken(token);
         },
         error: (jqXHR, exception) => {
-            loginFailure();
+            $('.alert').attr('aria-hidden', 'false').removeClass('hidden');
         }
     });
 }
@@ -89,6 +88,53 @@ function successToken(token) {
     }
 }
 
-function loginFailure() {
-    $('.alert').attr('aria-hidden', 'false').removeClass('hidden');
+// Logout
+$('#js-logout-button').click(event => {
+    console.log('logout btn clicked yea babe!')
+    event.preventDefault();
+    logoutUser();
+})
+
+function logoutUser() {
+    localStorage.removeItem('authToken');
+    window.location.href = '/';
 }
+
+// Check user
+function parseJwt (token) {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace('-', '+').replace('_', '/');
+    return JSON.parse(window.atob(base64));
+};
+
+function checkUser() {
+    const token = sessionStorage.getItem('token');
+
+    console.log(token);
+    
+    if(!token) {
+        location.href = 'http://localhost:3000/';
+    } else {
+        $.ajax({
+            url: '/api/users',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            success: (response) => {
+                console.log(response)
+                $('#loader-wrapper').hide();
+                const payloadData = parseJwt(token);
+                $('#email').text(`Welcome back: ${payloadData.email}`)
+            },
+            error: () => {
+                sessionStorage.removeItem('token');
+                location.href = 'http://localhost:3000/';
+            }
+        })
+    }
+}
+
+$(function() {
+    console.log('check user is listening');
+    checkUser();
+});

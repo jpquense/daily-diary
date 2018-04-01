@@ -2,26 +2,42 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title></title>
-        <meta name="description" content="First things first shows us how to start each day in the best mindset possible">
+        <title>Home | Daily Diary</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css">
-        <link rel="stylesheet" href="/generic.styles/grid.css">
-        <link rel="stylesheet" href="/home/home.css">
-        <link rel="icon" type="image/png" href="/images/favicon-note.png" />
+        <meta name="description" content="Daily Diary is an application that easily enables us to journal our goals and gratitudes.">
+        <!-- CSS Styling -->
+        <link rel="stylesheet" href="/css/grid.css">
+        <link rel="stylesheet" href="/css/global.css">
+        <link rel="stylesheet" href="/css/home.css">
+        <!-- favicon -->
+        <link rel="icon" type="image/png" href="/images/favicon-note.png">
     </head>
     <body>
-        <header class="row">
-            <img src="/images/family-fun.jpg" alt="family playing in park">
+        <div class="loader">
+                <p class="loader_text">Loading... <i class="fa fa-circle-notch fa-spin"></i></p>
+        </div>
+        <nav role="navigation">
+                <h2 class="col-12"><em>Track your of daily gratitudes and goals!</em></h2>
+                <ul>
+                    <li><button id="js-logout-button">Logout</button></li>
+                    <li><a href="/gratitudes.html"><button>Track</button></a></li>
+                </ul>
+        </nav>
+
+        <header role="banner" class="row">
             <h1 class="col-12">Daily Diary</h1>
+            <p class="greeting auth_greet">Welcome, </p>
+            <img src="/images/family-fun.jpg" alt="family playing in park">
         </header>
-        <main>
-            <section class="row">
-                <p class="col-12">Track your of daily gratitudes and goals!</p>
-                <a href="/gratitudes/gratitudes.html"><button>Start</button></a>
-                <p class="col-12">Press start to begin and follow along. Change begins now!</p>
-            </section>
-            <section class="counter row">
+ 
+        <section class="row region">
+                <p>Everyday is another oppurtunity to <strong>CHOOSE</strong><br> how we will approach
+                <em>Daily Dose</em> is a fun, and guide<br> that empowers us to be grateful and intentional.<br>
+               So we always start our day focused on what matters most.</p>
+        </section>
+
+        <main role="main">
+            <section role="region" class="counter row">
                 <div class="counter-left col-12">
                     <button class="js-gratitude-btn">View my Gratitudes</button>
                 </div>
@@ -35,13 +51,13 @@
 
             </div>
         </section>
-        <footer class="row footer">
-            <p>Everyday is another oppurtunity to <strong>CHOOSE</strong><br> how we will approach
-            <em>Daily Dose</em> is a fun, and guide<br> that empowers us to be gratiful and intentional.<br>
-           So we always start our day focused on what matters most.</p>
-        </footer>
 
+        <footer role="contentinfo">
+            <span>Copyright &copy; 2018 <a href="https://github.com/jpquense" target="_blank">John P Quense</a> All Rights Reserved.</span>
+        </footer>
+        <!-- js scripts -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>       
-        <script type="text/javascript" src="/home/home.js"></script>
+        <script type="text/javascript" src="/js/users.js"></script>
+        <script type="text/javascript" src="/js/home.js"></script>
     </body>
 </html>

@@ -1,4 +1,5 @@
 module.exports = (...fields) => (req, res, next) => {
+  console.log('requiredFields ran!');
     for (let i = 0; i < fields.length; i++) {
       const field = fields[i];
       if(!(field in req.body && req.body[field])) {

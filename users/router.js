@@ -15,27 +15,32 @@ const router = express.Router();
 
 // Create new user
 router.route('/users')
-  .post(disableWithToken, requiredFields('firstName', 'username', 'password', 'lastName', 'email'), (req, res) => {
-    User.find({username: req.body.username})
+  .post(disableWithToken, requiredFields('firstName', 'lastName', 'username','email', 'password'), (req, res) => {
+    console.log('route /api/users was reached with post request!');
+    console.log(req.body);
+    User
+    .find({"email": req.body.email})
     .count()
     .then(count => {
       if (count > 0) {
-        return Promise.reject({
+        // return res.status(422).json({error: 'Email address is already taken please login or try a new email address'});
+        Promise.reject({
           code: 422,
           reason: 'ValidationError',
           message: 'Username already taken',
           location: 'Username'
         });
+        return res.status(422).json({error: 'Email address is already taken please login or try a new email address'});
       }
       return User.hashPassword(req.body.password);
     })
     .then(hash => {
       return User.create({
         username: req.body.username,
-        password: hash,
-        firstName: req.body.firstName,
+        email: req.body.email,
         lastName: req.body.lastName,
-        email: req.body.email
+        password: hash,
+        firstName: req.body.firstName
       })
       .then(user => {
         return res.status(201).json(user.serialize());
@@ -46,9 +51,9 @@ router.route('/users')
           return res.status(err.code).json(err);
         }
         res.status(500).json({code: 500, message: 'Internal server error!'});
-      });
-    });
-  });
+      })
+    })
+  })
 
 const jwtAuth = passport.authenticate('jwt', {session: false});
 
