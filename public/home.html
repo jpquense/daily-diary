@@ -13,51 +13,56 @@
         <link rel="icon" type="image/png" href="/images/favicon-note.png">
     </head>
     <body>
-        <div class="loader">
-                <p class="loader_text">Loading... <i class="fa fa-circle-notch fa-spin"></i></p>
+        <div id="js-loader-wrapper">
+            <div id="js-loader"></div>
         </div>
-        <nav role="navigation">
-                <h2 class="col-12"><em>Track your of daily gratitudes and goals!</em></h2>
-                <ul>
-                    <li><button id="js-logout-button">Logout</button></li>
-                    <li><a href="/gratitudes.html"><button>Track</button></a></li>
-                </ul>
-        </nav>
 
-        <header role="banner" class="row">
-            <h1 class="col-12">Daily Diary</h1>
-            <p class="greeting auth_greet">Welcome, </p>
-            <img src="/images/family-fun.jpg" alt="family playing in park">
-        </header>
- 
-        <section class="row region">
-                <p>Everyday is another oppurtunity to <strong>CHOOSE</strong><br> how we will approach
-                <em>Daily Dose</em> is a fun, and guide<br> that empowers us to be grateful and intentional.<br>
-               So we always start our day focused on what matters most.</p>
-        </section>
+        <div class="js-app">
 
-        <main role="main">
-            <section role="region" class="counter row">
-                <div class="counter-left col-12">
-                    <button class="js-gratitude-btn">View my Gratitudes</button>
+            <nav role="navigation">
+                    <h2 class="col-12"><em>Track your of daily gratitudes and goals!</em></h2>
+                    <ul>
+                        <li><button id="js-logout-button">Logout</button></li>
+                        <li><a href="/gratitudes.html"><button>Track</button></a></li>
+                    </ul>
+            </nav>
+
+            <header role="banner" class="row">
+                <h1 class="col-12">Daily Diary</h1>
+                <h2 class="js-greeting auth_greet">Welcome, </h2>
+                <img src="/images/family-fun.jpg" alt="family playing in park">
+            </header>
+    
+            <section class="row region">
+                    <p>Everyday is another oppurtunity to <strong>CHOOSE</strong><br> how we will approach
+                    <em>Daily Dose</em> is a fun, and guide<br> that empowers us to be grateful and intentional.<br>
+                So we always start our day focused on what matters most.</p>
+            </section>
+
+            <main role="main">
+                <section role="region" class="counter row">
+                    <div class="counter-left col-12">
+                        <button class="js-gratitude-btn">View my Gratitudes</button>
+                    </div>
+                    <div class="counter-right col-12">
+                        <button class="js-goals-btn">View my Goals</button>
+                    </div>
+                </section>           
+            </main>
+            <section>
+                <div class="js-modal modal">
+
                 </div>
-                <div class="counter-right col-12">
-                    <button class="js-goals-btn">View my Goals</button>
-                </div>
-            </section>           
-        </main>
-        <section>
-            <div class="js-modal modal">
+            </section>
 
-            </div>
-        </section>
+            <footer role="contentinfo">
+                <span>Copyright &copy; 2018 <a href="https://github.com/jpquense" target="_blank">John P Quense</a> All Rights Reserved.</span>
+            </footer>
 
-        <footer role="contentinfo">
-            <span>Copyright &copy; 2018 <a href="https://github.com/jpquense" target="_blank">John P Quense</a> All Rights Reserved.</span>
-        </footer>
+        </div>
         <!-- js scripts -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>       
-        <script type="text/javascript" src="/js/users.js"></script>
-        <script type="text/javascript" src="/js/home.js"></script>
+        <script type="text/javascript" src="/js/protected.js"></script>
+        <!-- <script type="text/javascript" src="/js/home.js"></script> -->
     </body>
 </html>

@@ -35,8 +35,7 @@ router.post('/login', disableWithToken, requiredFields('email', 'password'), loc
 const jwtAuth = passport.authenticate('jwt', {session: false});
 
 router.get('/info', jwtAuth, (req, res) => {
-  console.log(req.user);
-  res.json({})
+  res.json(req.user);
 })
 
 router.post('/refresh', jwtAuth, (req,res) => {

@@ -1,41 +1,5 @@
 'use strict';
 
-const MOCK_GRATITUDES = {
-	"gratitudes": [
-        {
-            "id": "1111111",
-            "content": "I am grateful for my friend taking me out to lunch.",
-            "created": 1470016976609,
-            "date": "2017-04-01"
-        },
-        {
-            "id": "222222",
-            "content": "I am grateful for my friend taking me out to lunch.",
-            "created": 1470016976609,
-            "date": "2017-04-20"
-        },
-        {
-            "id": "333333",
-            "content": "I am grateful for my friend taking me out to lunch.",
-            "publishedAt": 1470016976609,
-            "date": "2017-04-28"
-        },
-        {
-            "id": "4444444",
-            "content": "I am grateful for my friend taking me out to lunch.",
-            "created": 1470016976609,
-            "date": "2017-04-30"
-        }
-    ]
-};
-
-// this function's name and argument can stay the
-// same after we have a live API, but its internal
-// implementaion will change. Instead of using a
-// timeout function that returns mock data, it will 
-// use jQuery's AJAX functionality to make a call 
-// to the server and then run the callbackFn
-// POST client side ajax call
 function getGratitudes(callbackFN) {
     // we use a `setTimeout` to make this asynchronous
     // as it will be with a real ajax call.
@@ -275,3 +239,4 @@ $('.modal').on('submit', '', function(event) {
     console.log('Submit updated item listening event worked');
     postAndDisplayGratitudes();
 })
+

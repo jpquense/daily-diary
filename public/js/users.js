@@ -73,7 +73,8 @@ function postReturningUser(email, password) {
             password: password
         }),
         success: (token) => {
-            successToken(token);
+            localStorage.setItem('authToken', token.authToken);
+            location.href = '/home.html';
         },
         error: (jqXHR, exception) => {
             $('.alert').attr('aria-hidden', 'false').removeClass('hidden');
@@ -81,60 +82,31 @@ function postReturningUser(email, password) {
     });
 }
 
-function successToken(token) {
-    if(token) {
-        localStorage.setItem('authToken', token.authToken);
-        window.location.href = '/home.html';
-    }
-}
+  // Show links for authenticated users
+//   $(() => {
+//     showLinks();
+//     let token = localStorage.getItem('authToken');
+//     if(token != null) {
+//       let userObject = parseJwt(token);
+//       $('.greeting').show().append((userObject.user.firstName) + '!');
+//     }
+//   })
 
-// Logout
-$('#js-logout-button').click(event => {
-    console.log('logout btn clicked yea babe!')
-    event.preventDefault();
-    logoutUser();
-})
+//   function showLinks() {
+//     let clientToken = localStorage.getItem('authToken');
+//     if (!clientToken) {
+//       $('.dashboard_link').hide();
+//       $('.logout_button').hide();
+//       $('.archive_link').hide();
+//       $('.login_link').show();
+//       $('#sign_up_form').show();
+//     } else {
+//       $('.dashboard_link').show();
+//       $('.logout_button').show();
+//       $('.archive_link').show();
+//       $('.login_link').hide();
+//       $('#sign_up_form').hide();
+//       $('#sign_up_title').css({'margin-right': '0', 'width': '90%'}).append(`<p>Visit your <a href='/dashboard.html'>dashboard</a> to get started.</p>`);
+//     }
+//   }
 
-function logoutUser() {
-    localStorage.removeItem('authToken');
-    window.location.href = '/';
-}
-
-// Check user
-function parseJwt (token) {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace('-', '+').replace('_', '/');
-    return JSON.parse(window.atob(base64));
-};
-
-function checkUser() {
-    const token = sessionStorage.getItem('token');
-
-    console.log(token);
-    
-    if(!token) {
-        location.href = 'http://localhost:3000/';
-    } else {
-        $.ajax({
-            url: '/api/users',
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            success: (response) => {
-                console.log(response)
-                $('#loader-wrapper').hide();
-                const payloadData = parseJwt(token);
-                $('#email').text(`Welcome back: ${payloadData.email}`)
-            },
-            error: () => {
-                sessionStorage.removeItem('token');
-                location.href = 'http://localhost:3000/';
-            }
-        })
-    }
-}
-
-$(function() {
-    console.log('check user is listening');
-    checkUser();
-});
