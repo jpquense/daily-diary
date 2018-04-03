@@ -30,7 +30,6 @@ function postNewUser (firstName, lastName, username, email, password) {
             password: password
         }),
         success: (data) => {
-            console.log(data);
             if(data) {
                 $('#signup-form').prepend(
                     `<div class='sign-up-success'><span style='vertical-align: middle;'>Hurray! You have successfully signed up! Now you can <a href='/'>login</a>!<span></div>`
@@ -81,32 +80,3 @@ function postReturningUser(email, password) {
         }
     });
 }
-
-  // Show links for authenticated users
-//   $(() => {
-//     showLinks();
-//     let token = localStorage.getItem('authToken');
-//     if(token != null) {
-//       let userObject = parseJwt(token);
-//       $('.greeting').show().append((userObject.user.firstName) + '!');
-//     }
-//   })
-
-//   function showLinks() {
-//     let clientToken = localStorage.getItem('authToken');
-//     if (!clientToken) {
-//       $('.dashboard_link').hide();
-//       $('.logout_button').hide();
-//       $('.archive_link').hide();
-//       $('.login_link').show();
-//       $('#sign_up_form').show();
-//     } else {
-//       $('.dashboard_link').show();
-//       $('.logout_button').show();
-//       $('.archive_link').show();
-//       $('.login_link').hide();
-//       $('#sign_up_form').hide();
-//       $('#sign_up_title').css({'margin-right': '0', 'width': '90%'}).append(`<p>Visit your <a href='/dashboard.html'>dashboard</a> to get started.</p>`);
-//     }
-//   }
-

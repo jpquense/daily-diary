@@ -8,23 +8,21 @@ function parseJwt (token) {
 };
 
 function authorizeUser() {
-    console.log('authorizeUser ran!');
     const token = localStorage.getItem('authToken');
     if (!token) {
         location.href = '/';
     }
     $.ajax({
-        url: 'api/info',
+        url: 'api/protected',
         type: 'GET',
         dataType: 'json',
         headers: {
             Authorization: `Bearer ${token}`
         },
         success: (response) => {
-            console.log(response, token)
+            console.log(response);
             $('#js-loader-wrapper').hide();
             const payloadData = parseJwt(token);
-            
         },
         error: function() {
             localStorage.removeItem('authToken');
@@ -34,13 +32,11 @@ function authorizeUser() {
 }
 
 $(() => {
-    console.log('protected api fired!')
     authorizeUser();
 })
 
 // Logout
 $('#js-logout-button').click(event => {
-    console.log('logout btn clicked yea babe!')
     event.preventDefault();
     logoutUser();
 })

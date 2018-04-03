@@ -28,15 +28,16 @@ const localAuth = passport.authenticate('local', { session: false });
 
 // Get jwt token at login in exhange for username and password using local authentication
 router.post('/login', disableWithToken, requiredFields('email', 'password'), localAuth, (req,res) => {
+  console.log('login endpoint reached')
   const authToken = createAuthToken(req.user);
   res.json({authToken});
 });
 
 const jwtAuth = passport.authenticate('jwt', {session: false});
 
-router.get('/info', jwtAuth, (req, res) => {
-  res.json(req.user);
-})
+router.get('/protected', jwtAuth, (req, res) => {
+  res.status(200).json({status: 'ok!'});
+});
 
 router.post('/refresh', jwtAuth, (req,res) => {
   const authToken = createAuthToken(req.user);

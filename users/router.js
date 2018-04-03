@@ -16,23 +16,15 @@ const router = express.Router();
 // Create new user
 router.route('/users')
   .post(disableWithToken, requiredFields('firstName', 'lastName', 'username','email', 'password'), (req, res) => {
-    console.log('route /api/users was reached with post request!');
-    console.log(req.body);
     User
     .find({"email": req.body.email})
     .count()
     .then(count => {
       if (count > 0) {
-        // return res.status(422).json({error: 'Email address is already taken please login or try a new email address'});
-        Promise.reject({
-          code: 422,
-          reason: 'ValidationError',
-          message: 'Username already taken',
-          location: 'Username'
-        });
-        return res.status(422).json({error: 'Email address is already taken please login or try a new email address'});
+          return res.status(422).json({message: 'Email is already taken'}).end()
+      } else {
+      return User.hashPassword(req.body.password);        
       }
-      return User.hashPassword(req.body.password);
     })
     .then(hash => {
       return User.create({
@@ -52,6 +44,10 @@ router.route('/users')
         }
         res.status(500).json({code: 500, message: 'Internal server error!'});
       })
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).json({message: 'Internal server error'});
     })
   })
 

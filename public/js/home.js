@@ -1,144 +1,120 @@
 'use strict';
+// Global variables
+let numberOfGratitudes;
+let currentGratitudeId;
+let gratitudeIdToDelete;
+// GET /gratitudes
+function getGratitudes(callback) {
+    const token = localStorage.getItem('authToken');
+    $.ajax({
+      url: 'api/gratitudes',
+      type: 'GET',
+      dataType: 'json',
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      success: function(data) {
+        if(data) {
+          callback(data);
+        }
+      },
+      error: function(jqXHR, exception) {}
+    });
+  }
 
-function getGratitudes(callbackFN) {
-    // we use a `setTimeout` to make this asynchronous
-    // as it will be with a real ajax call.
-        setTimeout(function() { callbackFN(MOCK_GRATITUDES)}, 100);
-}
-// GET client side ajax call
-function getAllGratitudes(callbackFN) {
+  // POST /gratitudes
+function postGratitudes(callback) {
+    numberOfGratitudes++;
+    
+    const newGratitude = $('input[id="js-add-item"]').val();
+    const token = localStorage.getItem('authToken');
     $.ajax({
-    	url: `https://tranquil-wave-50065.herokuapp.com/api/gratitudes`,
-    	method: 'GET',
-      data: {
-      	content,
-        date,
-      },
-      success: () => {
-      	console.log('Works!')
-      },
-      error: () => {
-      	console.log('I get an error :/')
-      }
-    })
-}
-
-function getGratitudesById(callbackFN) {
-    $.ajax({
-    	url: `https://tranquil-wave-50065.herokuapp.com/api/gratitudes/${gratitudeId}`,
-    	method: 'GET',
-      data: {
-      	content,
-        date,
-      },
-      success: () => {
-      	console.log('Works!')
-      },
-      error: () => {
-      	console.log('I get an error :/')
-      }
-    })
-}
-
-function getGratitudesByDate(callbackFN) {
-    $.ajax({
-    	url: `https://tranquil-wave-50065.herokuapp.com/api/gratitudes/${gratitudeDate}`,
-    	method: 'GET',
-      data: {
-      	content,
-        date,
-      },
-      success: () => {
-      	console.log('Works!')
-      },
-      error: () => {
-      	console.log('I get an error :/')
-      }
-    })
-}
-// POST client side ajax call
-function postGratitudes(callbackFN) {
-    $.ajax({
-    	url: `https://tranquil-wave-50065.herokuapp.com/api/gratitudes/posts/${gratitudeId}`,
-    	method: 'POST',
-      data: {
-      	content,
-        date,
-      },
-      success: () => {
-      	console.log('Works!')
-      },
-      error: () => {
-      	console.log('I get an error :/')
-      }
-    })
+        url: 'api/gratitudes',
+        type: 'POST',
+        dataType: 'json',
+        headers: { Authorization: `Bearer ${token}` },
+        contentType: 'application/json',
+        data: JSON.stringify({
+            gratitude: newGratitude
+        }),
+        success: function(data) {
+            if(data) {
+                callback(data);
+                $('.js-item-count').html(`<h3 class="js-item-count col-4">Gratitude Count: ${numberOfGratitudes}</h3>`);
+            }
+        },
+        error: function(jqXHR, exception) {}
+    });
 }
 
-// PUT client side ajax call
-function putGratitudes(callbackFN) {
+// PUT /gratitudes
+function putGratitudes(callback) {
+    const token = localStorage.getItem('authToken');
+    let updatedGratitude = $('input[id="js-update-item"]').val();
     $.ajax({
-    	url: `https://tranquil-wave-50065.herokuapp.com/api/gratitudes/${gratitudeId}`,
-    	method: 'PUT',
-      data: {
-      	content,
-        date,
-      },
-      success: () => {
-      	console.log('Works!')
-      },
-      error: () => {
-      	console.log('I get an error :/')
-      }
-    })
+        url: `api/gratitudes/${currentGratitudeId}`,
+        type: 'PUT',
+        dataType: 'json',
+        headers: { Authorization: `Bearer ${token}` },
+        contentType: 'application/json',
+        data: JSON.stringify({
+            gratitude: updatedGratitude
+        }),
+        success: function(data) {
+            if(data) {
+                callback(data);
+            }
+        },
+        error: function(jqXHR, exception) {}
+    });
 }
 
-// DELETE client side ajax call
-function deleteGratitudesById(callbackFN) {
+// Delete /gratitudes
+function deleteGratitudes(callback) {
+    const token = localStorage.getItem('authToken');
+    numberOfGratitudes--;
+    
     $.ajax({
-    	url: `https://tranquil-wave-50065.herokuapp.com/api/gratitudes/${gratitudeId}`,
-    	method: 'DELETE',
-      data: {
-      	content,
-        date,
-      },
-      success: () => {
-      	console.log('Works!')
-      },
-      error: () => {
-      	console.log('I get an error :/')
-      }
-    })
+        url: `api/gratitudes/${gratitudeIdToDelete}`,
+        type: 'DELETE',
+        dataType: 'json',
+        headers: { Authorization: `Bearer ${token}` },
+        success: function(data) {
+            console.log(`Successfully deleted post ${gratitudeIdToDelete}`);
+            $('.js-item-count').html(`<h3 class="js-item-count col-4">Gratitude Count: ${numberOfGratitudes}</h3>`);
+            $('.js-grat-list').html(`<h4>Gratitude successfully deleted!</h4>`);
+        },
+        error: function(jqXHR, exception) {}
+    });
 }
 
-// display functions
+// render display
 function displayGratitudesModal(data) {
-    const listLength = data.gratitudes.length;
-    const minDate = data.gratitudes[0].date;
-    const maxDate = data.gratitudes[data.gratitudes.length - 1].date;
+    numberOfGratitudes = data.length;
     $('.js-modal').html(`
         <header>
         <h2 class="js-modal-header">I am grateful for . . . </h2>
         </header>
         <div class="modal-body">
-            <div class="get-all row">
-                <h3 class="col-4">Gratitude Count: ${listLength}</h3>
-                <button class="js-modal-btn-all" type="submit" ">Get All</button>
+            <div class="get-all row js-item-count ">
+                <h3 class="col-4">Gratitude Count: ${data.length}</h3>
             </div>
-            <form class="get-some row">
-                <fieldset>
-                    <legend>By number</legend>
-                    <label class="col-4" for="grat-number">How many gratitudes do you want to view?</label>
-                    <input class="col-4" type="number" placeholder="1" id="grat-number" min="1" max="${listLength}">
-                    <button class="col-4 js-modal-btn-count" type="submit" ">Get Gratitudes</button>
-                </fieldset>
-                <fieldset>
-                    <legend>By date</legend>
-                    <label class="col-4" for="grat-date">What days gratidues do you want to view?</label>
-                    <input class="col-4" type="date" placeholder="1" id="grat-date" min="${minDate}" max="${maxDate}">
-                    <button class="col-4 js-modal-btn-date" type="submit" ">Get Gratitudes</button>
+            <form class="js-form-get-gratitudes row">
+                <fieldset aria-role="group">
+                    <legend>Gratitudes</legend>
+                    <label class="col-4" for="grat-number">Want to view and edit past gratitudes?</label>
+                    <button class="js-gratitude-btn col-4" type="submit">Get Gratitudes</button>
                 </fieldset>
             </form>
-    
+            <form class="js-form-post row">
+                <fieldset aria-role="group">
+                    <legend>Add More Gratitudes</legend>
+                    <input type="text" class="col-12" id="js-add-item" placeholder="I am grateful for my dog being so cute." required>
+                    <label class="col-4" for="js-add-item">Grateful for anything else?</label>
+                    <button class="col-4 js-btn-post" type="submit" ">Add to List</button>
+                </fieldset>
+            </form>
+  
             <div class="js-grat-list grat-list">
             </div>
         </div>
@@ -150,66 +126,71 @@ function displayGratitudesModal(data) {
 }
 
 function displayGratitudesList(data) {
-    $('.js-grat-list').html(`
+    if (data.length === 0) {
+        $('.js-grat-list').html(`
         <div class="list-header">
-            <h3 class="col-12">Look how great my life is!</h3>
-            <button class="js-modal-btn-close">Collapse</button>
-        </div>
-        <ol class="js-list"></ol>
-        <form class="add-items row">
-            <label class="col-6 form-control" for="todo-list-item">Grateful for anything else?</label> 
-            <button class="add col-3 form-control" type="submit">Add to List</button>
-            <input type="text" class="form-input col-12" id="todo-list-item" placeholder="my wife being so kind.">
-        </form>        
-    `);
-    data.gratitudes.forEach((element, index) => {
-        const date = element.date;
-        const id = element.id;
-        const content = element.content
-        console.log(date, id, content);
-        $('.js-list').append(`
-        <li class="" data-index="${index}" data-id="${id}">I am grateful for ${content} <br>${date}
-            <div>
-                <button class="js-update-btn">Update</button>
-                <button>Delete</button>
+            <h3 class="col-12">Nothing Added yet! Start tracking</h3>
+            <button class="js-modal-btn-close">Close</button>
+         </div>
+        `)
+    } else {
+        $('.js-grat-list').html(`
+            <div class="list-header">
+                <h3 class="col-12">Look how great my life is!</h3>
+                <button class="js-modal-btn-close">Collapse</button>
             </div>
-            <div class="js-update-form col-3"></div>
-            </li><hr>
-        `); 
-    });
-
+            <ol class="js-list"></ol>  
+        `);
+        data.forEach((element, index) => {
+            const date = convertDate(element);
+            const _id = element._id;
+            const gratitude = element.gratitude;
+            $('.js-list').append(`
+            <li class="" data-index="${index}" data-id="${_id}" data-gratitude="${gratitude}">I am grateful for ${gratitude} <br>${date}
+                <div class="row">
+                    <button class="js-update-btn col-3">Update</button>
+                    <button class="js-delete-btn col-3">Delete</button>
+                </div>
+            </li>
+            <hr>
+            `); 
+        });  
+    }
     $('.js-grat-list').slideDown('fast');
 }
 
-function displayUpdateInput() {
-    console.log('display updates input ran');
-    $('js-update-form').html(`
-        <form class="add-items row">
-            <input type="text" class="form-control col-6" id="todo-list-item" placeholder="What do you need to do today?">
-            <button class="add col-3" type="submit">Add to List</button>
-        </form>
-    `)
+function displayNewGratitude(data) {
+    $('.js-grat-list').html(`<h4>New gratitude: ${data.gratitude}</h4>`);
 }
 
-// call ajax functions with display call back functions
-
-function getAndDisplayGratitudesModal() {
-	getGratitudes(displayGratitudesModal);
+function displayUpdateOption(gratitude) {
+    $('.js-grat-list').html(`
+        <form class="js-update-item row">
+            <fieldset>
+                <legend><strong>${gratitude}</strong></legend>
+                <input type="text" class="col-12" id="js-update-item" placeholder="... update gratitude!" required>
+                <button class="col-3" type="submit">Update</button>
+            </fieldset>
+        </form>  
+    `);
 }
 
-function getAndDisplayAllGratitudes() {
-	getGratitudes(displayGratitudesList);
+function displayUpdatedGratitude(data) {
+    $('.js-grat-list').html(`<h4>Gratitude successfully updated!</h4>`);
 }
 
-function postAndDisplayGratitudes() {
-    postGratitudes(displayGratitudesList);
+  //covert the ISO date to human readable Date
+function convertDate(gratitude) {
+    let date = new Date(gratitude.updatedAt).toString();
+    let parsedDate = date.slice(0,15);
+return parsedDate;
 }
 
 // listener events
 
 // display gratitude modal
-$('.js-gratitude-btn').click(function() {
-    getAndDisplayGratitudesModal();
+$('.js-gratitude-btn').on('click', function() {
+    getGratitudes(displayGratitudesModal);
 }); 
 
 // exit modal
@@ -218,8 +199,9 @@ $('.modal').on('click', '.js-modal-btn-exit', function() {
 }); 
 
 // get and display all gratitudes
-$('.modal').on('click', '.js-modal-btn-all', function() {
-    getAndDisplayAllGratitudes();
+$('.modal').on('click', '.js-gratitude-btn', function(event) {
+    event.preventDefault();
+    getGratitudes(displayGratitudesList);
 }); 
 
 // close gratitudes list
@@ -227,16 +209,29 @@ $('.modal').on('click', '.js-modal-btn-close', function() {
     $('.js-grat-list').slideUp('fast');
 }); 
 
-// update gratitude
-
-$('.modal').on('click', '.js-update-grat', function() {
-    console.log('Update button is listening');
-    displayUpdateInput();
+// POST new gratitude
+$('.modal').on('submit', '.js-form-post', function(event) {
+    event.preventDefault();
+    postGratitudes(displayNewGratitude);
+    $('input[id="js-add-item"]').val('');
 });
 
-$('.modal').on('submit', '', function(event) {
-    event.preventDefault();
-    console.log('Submit updated item listening event worked');
-    postAndDisplayGratitudes();
-})
+// open update gratitude option
+$('.modal').on('click', '.js-update-btn', function() {
+    let existingId = $(this).closest('li').attr('data-id');
+    let existingGratitude = $(this).closest('li').attr('data-gratitude');
+    currentGratitudeId = existingId;
+    displayUpdateOption(existingGratitude);
+});
 
+// update with PUT request for gratitude and display it
+$('.modal').on('submit', '.js-update-item', function(event) {
+    event.preventDefault();
+    putGratitudes(displayUpdatedGratitude);
+}); 
+
+// DELETE gratitude
+$('.modal').on('click', '.js-delete-btn', function() {
+    gratitudeIdToDelete = $(this).closest('li').attr('data-id');
+    deleteGratitudes();
+});
