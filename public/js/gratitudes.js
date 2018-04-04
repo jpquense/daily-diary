@@ -50,7 +50,7 @@ function postGratitudes(callback) {
 // PUT /gratitudes
 function putGratitudes(callback) {
     const token = localStorage.getItem('authToken');
-    let updatedGratitude = $('input[id="js-update-item"]').val();
+    let updatedGratitude = $('input[id="js-put-gratitude"]').val();
     $.ajax({
         url: `api/gratitudes/${currentGratitudeId}`,
         type: 'PUT',
@@ -102,11 +102,11 @@ function displayGratitudesModal(data) {
             <form class="js-form-get-gratitudes row">
                 <fieldset aria-role="group">
                     <legend>Gratitudes</legend>
-                    <label class="col-4" for="grat-number">Want to view and edit past gratitudes?</label>
+                    <div class="col-4">Want to view and edit past gratitudes?</div>
                     <button class="js-gratitude-btn col-4" type="submit">Get Gratitudes</button>
                 </fieldset>
             </form>
-            <form class="js-form-post row">
+            <form class="js-form-gratitude row">
                 <fieldset aria-role="group">
                     <legend>Add More Gratitudes</legend>
                     <input type="text" class="col-12" id="js-add-item" placeholder="I am grateful for my dog being so cute." required>
@@ -148,8 +148,8 @@ function displayGratitudesList(data) {
             $('.js-list').append(`
             <li class="" data-index="${index}" data-id="${_id}" data-gratitude="${gratitude}">I am grateful for ${gratitude} <br>${date}
                 <div class="row">
-                    <button class="js-update-btn col-3">Update</button>
-                    <button class="js-delete-btn col-3">Delete</button>
+                    <button class="js-update-gratitude col-3">Update</button>
+                    <button class="js-delete-gratitude col-3">Delete</button>
                 </div>
             </li>
             <hr>
@@ -164,11 +164,12 @@ function displayNewGratitude(data) {
 }
 
 function displayUpdateOption(gratitude) {
+    console.log('displayUpdateOption ran');
     $('.js-grat-list').html(`
-        <form class="js-update-item row">
+        <form class="js-put-gratitude row">
             <fieldset>
                 <legend><strong>${gratitude}</strong></legend>
-                <input type="text" class="col-12" id="js-update-item" placeholder="... update gratitude!" required>
+                <input type="text" class="col-12" id="js-put-gratitude" placeholder="... update gratitude!" required>
                 <button class="col-3" type="submit">Update</button>
             </fieldset>
         </form>  
@@ -210,28 +211,36 @@ $('.modal').on('click', '.js-modal-btn-close', function() {
 }); 
 
 // POST new gratitude
-$('.modal').on('submit', '.js-form-post', function(event) {
+$('.modal').on('submit', '.js-form-gratitude', function(event) {
     event.preventDefault();
     postGratitudes(displayNewGratitude);
     $('input[id="js-add-item"]').val('');
 });
 
-// open update gratitude option
-$('.modal').on('click', '.js-update-btn', function() {
-    let existingId = $(this).closest('li').attr('data-id');
-    let existingGratitude = $(this).closest('li').attr('data-gratitude');
-    currentGratitudeId = existingId;
-    displayUpdateOption(existingGratitude);
+// open update gratitude option and display it
+$('.modal').on('click', '.js-update-gratitude', function() {
+    currentGratitudeId = $(this).closest('li').attr('data-id');
+    const existingGratitude = $(this).closest('li').attr('data-gratitude');
+
+    $('.js-grat-list').html(`
+        <form class="js-put-gratitude row">
+            <fieldset>
+                <legend><strong>${existingGratitude}</strong></legend>
+                <input type="text" class="col-12" id="js-put-gratitude" placeholder="... update gratitude!" required>
+                <button class="col-3" type="submit">Update</button>
+            </fieldset>
+        </form>  
+        `);
 });
 
 // update with PUT request for gratitude and display it
-$('.modal').on('submit', '.js-update-item', function(event) {
+$('.modal').on('submit', '.js-put-gratitude', function(event) {
     event.preventDefault();
     putGratitudes(displayUpdatedGratitude);
 }); 
 
 // DELETE gratitude
-$('.modal').on('click', '.js-delete-btn', function() {
+$('.modal').on('click', '.js-delete-gratitude', function() {
     gratitudeIdToDelete = $(this).closest('li').attr('data-id');
     deleteGratitudes();
 });

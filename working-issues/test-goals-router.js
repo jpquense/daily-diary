@@ -2,80 +2,24 @@
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const faker = require('faker');
-const mongoose = require('mongoose');
 const should = require('chai').should();
+const expect = chai.expect;
+const mongoose = require('mongoose');
+const faker = require('faker');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 
-const { Goal } = require('../goals/models');
+const { Goal } = require('../goals/models')
 const { User } = require('../users/models')
-const { closeServer, runServer, app } = require('../server');
-const { TEST_DATABASE_URL, JWT_SECRET } = require('../config');
-const expect = chai.expect;
+const { app , runServer, closeServer } = require('../server');
+const { TEST_DATABASE_URL, JWT_SECRET } = require('../config.js');
+const { sendAllDataToDb, createTestUser, createTestUserAndGoal, generateUserData, generateGoalData, tearDownDb } = require('./test-functions-goals')
+
 chai.use(chaiHttp);
-
-function sendAllDataToDb() {
-  console.info('Sending data to database...');
-  const testData = [];
-  for (let i=0; i<=1; i++) {
-    testData.push(createTestUserAndGoal());
-  }
-  return Goal.insertMany(testData);
-}
-
-function generateGoalData() {
-  console.log(`Generating goal data...`);
-  return {
-    goal: faker.lorem.sentence()
-  }
-}
-
-function createTestUser() {
-  return User.create(generateUserData());
-}
-
-function generateUserData() {
-  console.log(`Generating user data...`);
-  return {
-    firstName: faker.name.firstName(),
-    lastName: faker.random.word(),
-    username: faker.random.word(),
-    email: faker.internet.email(),
-    password: faker.internet.password()
-  }
-}
-
-function createTestUserAndGoal(i) {
-  return User.create(generateUserData())
-    .then(user => {
-      let userId = user._id;
-      let username = user.username;
-      let email = user.email;
-      const data = [];
-      for(let x = 0; x < 3; x++) {
-        let newGoal = generateGoalData();
-        newGoal.author = userId;
-        data.push(Goal.create(newGoal));
-      }
-      console.log(`Generated goals`);
-      return Promise.all(data);
-    })
-}
-
-function tearDownDb() {
-  return new Promise ((resolve, reject) => {
-    console.warn('Deleting database');
-    mongoose.connection.dropDatabase()
-      .then(result => resolve(result))
-      .catch(err => reject(err));
-  });
-}
-
 
 let testUser;
 
-describe('/api/goals API Resource', function() {
+describe('api/goals API Resource', function() {
   before(function() {
     return runServer(TEST_DATABASE_URL);
   });
@@ -98,7 +42,7 @@ describe('/api/goals API Resource', function() {
     return closeServer();
   });
 
-  describe('GET request to /api/goals', function() {
+  describe('GET request to /goals', function() {
     it('should list all existing goals', function() {
       const token = jwt.sign({user: {_id: testUser._id}}, JWT_SECRET, {expiresIn: 10000});
       let res;
@@ -110,26 +54,16 @@ describe('/api/goals API Resource', function() {
         res.should.have.status(200);
         res.should.be.json;
         res.body.should.be.an('object');
-        res.body.should.have.length.of.at.least(1);
-        res.body.forEach(function (goal) {
-          goal.should.be.a('object');
-          goal.should.include.keys('_id', 'goal');
-        });
-        return Goal.count();
       })
-      .then(count => {
-        res.body.should.have.length.of.at.least(3);
-      });
     });
   });
 
-
-  describe('POST request to /api/goals', function() {
+  describe('Post request to /goals', function() {
     it('should add a goal', function() {
       const token = jwt.sign({user: {_id: testUser._id}}, JWT_SECRET, {expiresIn: 10000});
       const newGoal = generateGoalData();
       return chai.request(app)
-        .post('/api/goals')
+        .goal('/api/goals')
         .set('Authorization', `Bearer ${token}`)
         .send(newGoal)
         .then(function(res) {
@@ -140,27 +74,28 @@ describe('/api/goals API Resource', function() {
     });
   });
 
-  describe('PUT request to /api/goals', function() {
-    it('should update fields sent', function() {
-      const updateData = {
+  describe('PUT request to /goals', function() {
+    it('should update goal', function() {
+      const updateGoal = {
         goal: faker.lorem.sentence()
       };
       const token = jwt.sign({user: {_id: testUser._id}}, JWT_SECRET, {expiresIn: 10000});
       return Goal
         .findOne()
         .then(result => {
-          updateData._id = result._id;
+          updateGoal._id = result._id;
           return chai.request(app)
           .put(`/api/goals/${result._id}`)
           .set('Authorization', `Bearer ${token}`)
-          .send(updateData)
+          .send(updateGoal)
         })
         .then(res => {
           res.should.have.status(204);
-          return Goal.findById(updateData._id);
+          res.should.be.an("object");
+          return Goal.findById(updateGoal._id);
         })
         .then(goal => {
-          goal.goal.should.deep.equal(updateData.goal);
+          goal.goal.should.deep.equal(updateGoal.goal);
         });
       });
     });
@@ -174,7 +109,7 @@ describe('/api/goals API Resource', function() {
         .then(_goal => {
           deletedGoal = _goal._id;
           return chai.request(app)
-            .delete(`api/goals/${deletedGoal}`)
+            .delete(`/api/goals/${deletedGoal}`)
             .set('Authorization', `Bearer ${token}`)
         })
         .then(res => {

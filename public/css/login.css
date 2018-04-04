@@ -5,16 +5,22 @@ font-size: 16px;
 
 body {
 font-family: mono, helvetica, arial, sans-serif;
-margin-top: 50px;
-background-color: green;
-color: white;
+margin-top: 65px;
+color: #0b0c10;
 text-align: center;
 background-size: cover;
 }
 
 h1 {
-font-weight: bold;
-font-size: 22px;
+    font-size: 64px;
+    font-weight: bolder;
+    color: #0b0c10;
+}
+
+h2 {
+    font-size: 26px;
+    font-weight: bolder;
+    color: #0b0c10;
 }
 
 a {
@@ -22,12 +28,13 @@ a {
 }
 
 nav {
-    background-color: darkgreen;
     margin-left: auto;
     margin-right: auto;
     position: fixed;
     top: 0;
-    width: 100%;
+    width: 98%;
+    background-color: rgba(27, 81, 90, 0.7);
+    color: white;
 }
 
 form {
@@ -38,7 +45,7 @@ form {
     margin-left: auto;
     margin-right: auto;
     padding: 5px;
-    background-color: #fff;
+    background-color: rgba(27, 81, 90, 0.4);
     border-radius: 5px;
 
 }
@@ -50,12 +57,12 @@ form label {
 }
 
 form a {
-    color: green;
+    color: #0b0c10;
     text-decoration: none;
 }
 
 form p, legend, h2 {
-    color: green;
+    color: #0b0c10;
     font-size: 18px;
 }
 
@@ -92,8 +99,9 @@ form p, legend, h2 {
     font-weight: 700;
     font-size: 17px;
     margin-bottom: 15px;
-    color: red;
-  }
+    color: #0b0c10;
+    color: white;
+}
 
 .hidden {
     visibility: hidden;

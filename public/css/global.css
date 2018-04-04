@@ -1,3 +1,17 @@
+* {
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+body {
+    font-family: arial, sans-serif;
+    margin-top: 50px;
+    background: cover;
+    color: #0b0c10;
+    background-size: cover;
+    background-image: url('/images/family.jpg');
+}
+
 #loader-wrapper {
     width: 100%;
     height: 100%;
@@ -9,7 +23,7 @@
 }
 #loader {
     border: 16px solid #f3f3f3; /* Light grey */
-    border-top: 16px solid green; /* Blue */
+    border-top: 16px solid lightblue;
     border-radius: 50%;
     width: 120px;
     height: 120px;

@@ -4,30 +4,37 @@ font-size: 16px;
 }
 
 body {
-font-family: mono, helvetica, arial, sans-serif;
-margin-top: 50px;
-background-color: green;
-color: white;
+margin-top: 65px;
+color:#0b0c10;
 text-align: center;
 background-size: cover;
 }
 
 h1 {
-font-weight: bold;
-font-size: 22px;
+    font-size: 64px;
+    font-weight: bolder;
+    color: #0b0c10;
 }
+
+h2 {
+    font-size: 26px;
+    font-weight: bolder;
+    color: #0b0c10;
+}
+
 
 a {
     color: white;
 }
 
 nav {
-    background-color: darkgreen;
+    background-color: rgba(27, 81, 90, 0.7);
     margin-left: auto;
     margin-right: auto;
     position: fixed;
     top: 0;
-    width: 100%;
+    width: 98%;
+    color: white;
 }
 
 form {
@@ -50,17 +57,17 @@ form label {
 }
 
 form a {
-    color: green;
+    color: #0b0c10;
     text-decoration: none;
 }
 
 form p { 
-    color: green;
+    color:#0b0c10;
     font-size: 12px;
 }
 
 .black-text {
-    color: black;
+    color:#0b0c10;
 }
 
 .input {
@@ -85,7 +92,7 @@ form p {
 .btn:hover {
     cursor: pointer;
     color: white;
-    background-color: black;
+    background-color:#0b0c10;
 }
 
 .sign-up-success,
@@ -96,12 +103,13 @@ form p {
   margin: 0 auto;
   margin-top: 20px;
   margin-bottom: 20px;
-  color: red;
+  color: white;
+  background-color: rgba(27, 81, 90, 0.7);
 }
 .sign-up-success a,
 #sign-up-title a {
   text-decoration: none;
-  color: #5D398F;
+  color: #0b0c10;
 }
 .sign_up_success a:hover,
 #sign-up-title a:hover {

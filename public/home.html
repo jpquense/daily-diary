@@ -19,34 +19,33 @@
 
         <div class="js-app">
 
-            <nav role="navigation">
-                    <h2 class="col-12"><em>Track your of daily gratitudes and goals!</em></h2>
-                    <ul>
-                        <li><button id="js-logout-button">Logout</button></li>
-                    </ul>
+            <nav role="navigation" class="row">
+                <h2 class="col-6"><em>Track your gratitudes and goals!</em></h2>
+                <div class="6">
+                    <button id="js-logout-button">Logout</button>
+                </div>
             </nav>
 
             <header role="banner" class="row">
                 <h1 class="col-12">Daily Diary</h1>
-                <h2 class="js-greeting auth_greet">Welcome, </h2>
-                <img src="/images/family-fun.jpg" alt="family playing in park">
             </header>
     
-            <section class="row region">
-                    <p>Everyday is another oppurtunity to <strong>CHOOSE</strong><br> how we will approach
-                    <em>Daily Dose</em> is a fun, and guide<br> that empowers us to be grateful and intentional.<br>
-                So we always start our day focused on what matters most.</p>
-            </section>
-
-            <main role="main">
-                <section role="region" class="counter row">
-                    <div class="counter-left col-12">
-                        <button class="js-gratitude-btn">View my Gratitudes</button>
-                    </div>
-                    <div class="counter-right col-12">
-                        <button class="js-goals-btn">View my Goals</button>
-                    </div>
-                </section>           
+            <main role="main" class="row">
+                <section class="col-6 region paragraph">
+                        <p class="col-12">Everyday is another oppurtunity to <strong>CHOOSE</strong><br>
+                        <em>Daily Dose</em><br>Empowers us to be grateful and intentional.<br>
+                    So no matter where we are in life we will be focused on what matters most.</p>
+                </section>
+                <div class="col-6">
+                    <section role="region" class="counter row">
+                        <div class="counter-left col-12">
+                            <button class="js-gratitude-btn">View my Gratitudes</button>
+                        </div>
+                        <div class="counter-right col-12">
+                            <button class="js-goals-btn">View my Goals</button>
+                        </div>
+                    </section>  
+                </div>         
             </main>
             <section>
                 <div class="js-modal modal">
@@ -54,8 +53,8 @@
                 </div>
             </section>
 
-            <footer role="contentinfo">
-                <span>Copyright &copy; 2018 <a href="https://github.com/jpquense" target="_blank">John P Quense</a> All Rights Reserved.</span>
+            <footer role="contentinfo" class="row">
+                <div class="col-12 footer">Copyright &copy; 2018 <a href="https://github.com/jpquense" target="_blank">John P Quense</a> All Rights Reserved.</div>
             </footer>
 
         </div>
@@ -63,7 +62,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>       
         <script type="text/javascript" src="/js/protected.js"></script>
         <script type="text/javascript" src="/js/gratitudes.js"></script>
-        <script type="text/javascript" src="/js/gratitudes.js"></script>
-
+        <script type="text/javascript" src="/js/goals.js"></script>
     </body>
 </html>

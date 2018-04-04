@@ -2,80 +2,24 @@
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const faker = require('faker');
-const mongoose = require('mongoose');
 const should = require('chai').should();
+const expect = chai.expect;
+const mongoose = require('mongoose');
+const faker = require('faker');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 
-const { Gratitude } = require('../gratitudes/models');
+const { Gratitude } = require('../gratitudes/models')
 const { User } = require('../users/models')
-const { closeServer, runServer, app } = require('../server');
-const { TEST_DATABASE_URL, JWT_SECRET } = require('../config');
-const expect = chai.expect;
+const { app , runServer, closeServer } = require('../server');
+const { TEST_DATABASE_URL, JWT_SECRET } = require('../config.js');
+const { sendAllDataToDb, createTestUser, createTestUserAndGratitude, generateUserData, generateGratitudeData, tearDownDb } = require('./test-functions-gratitudes')
+
 chai.use(chaiHttp);
-
-function sendAllDataToDb() {
-  console.info('Sending data to database...');
-  const testData = [];
-  for (let i=0; i<=1; i++) {
-    testData.push(createTestUserAndGratitude());
-  }
-  return Gratitude.insertMany(testData);
-}
-
-function generateGratitudeData() {
-  console.log(`Generating Gratitude data...`);
-  return {
-    gratitude: faker.lorem.sentence()
-  }
-}
-
-function createTestUser() {
-  return User.create(generateUserData());
-}
-
-function generateUserData() {
-  console.log(`Generating user data...`);
-  return {
-    firstName: faker.name.firstName(),
-    lastName: faker.random.word(),
-    username: faker.random.word(),
-    email: faker.internet.email(),
-    password: faker.internet.password()
-  }
-}
-
-function createTestUserAndGratitude(i) {
-  return User.create(generateUserData())
-    .then(user => {
-      let userId = user._id;
-      let username = user.username;
-      let email = user.email;
-      const data = [];
-      for(let x = 0; x < 5; x++) {
-        let newGratitude = generateGratitudeData();
-        newGratitude.author = userId;
-        data.push(Gratitude.create(newGratitude));
-      }
-      console.log(`Generated goals`);
-      return Promise.all(data);
-    })
-}
-
-function tearDownDb() {
-  return new Promise ((resolve, reject) => {
-    console.warn('Deleting database');
-    mongoose.connection.dropDatabase()
-      .then(result => resolve(result))
-      .catch(err => reject(err));
-  });
-}
-
 
 let testUser;
 
-describe('/api/goals API Resource', function() {
+describe('/api/gratitudes API Resource', function() {
   before(function() {
     return runServer(TEST_DATABASE_URL);
   });
@@ -98,7 +42,7 @@ describe('/api/goals API Resource', function() {
     return closeServer();
   });
 
-  describe('GET request to /api/gratitudes', function() {
+  describe('GET request to /gratitudes', function() {
     it('should list all existing gratitudes', function() {
       const token = jwt.sign({user: {_id: testUser._id}}, JWT_SECRET, {expiresIn: 10000});
       let res;
@@ -110,26 +54,16 @@ describe('/api/goals API Resource', function() {
         res.should.have.status(200);
         res.should.be.json;
         res.body.should.be.an('object');
-        res.body.should.have.length.of.at.least(1);
-        res.body.forEach(function (gratitude) {
-          gratitude.should.be.a('object');
-          gratitude.should.include.keys('_id', 'gratitude');
-        });
-        return Gratitude.count();
       })
-      .then(count => {
-        res.body.should.have.length.of.at.least(5);
-      });
     });
   });
 
-
-  describe('POST request to /api/gratitudes', function() {
+  describe('Post request to /gratitudes', function() {
     it('should add a gratitude', function() {
       const token = jwt.sign({user: {_id: testUser._id}}, JWT_SECRET, {expiresIn: 10000});
-      const newGratitude = generateGoalData();
+      const newGratitude = generateGratitudeData();
       return chai.request(app)
-        .post('/api/gratitudes')
+        .gratitude('/api/gratitudes')
         .set('Authorization', `Bearer ${token}`)
         .send(newGratitude)
         .then(function(res) {
@@ -140,27 +74,28 @@ describe('/api/goals API Resource', function() {
     });
   });
 
-  describe('PUT request to /api/gratitudes', function() {
-    it('should update gratitude sent', function() {
-      const updateData = {
+  describe('PUT request to /gratitudes', function() {
+    it('should update gratitude', function() {
+      const updateGratitude = {
         gratitude: faker.lorem.sentence()
       };
       const token = jwt.sign({user: {_id: testUser._id}}, JWT_SECRET, {expiresIn: 10000});
       return Gratitude
         .findOne()
         .then(result => {
-          updateData._id = result._id;
+          updateGratitude._id = result._id;
           return chai.request(app)
           .put(`/api/gratitudes/${result._id}`)
           .set('Authorization', `Bearer ${token}`)
-          .send(updateData)
+          .send(updateGratitude)
         })
         .then(res => {
           res.should.have.status(204);
-          return Gratitude.findById(updateData._id);
+          res.should.be.an("object");
+          return Gratitude.findById(updateGratitude._id);
         })
         .then(gratitude => {
-          gratitude.gratitude.should.deep.equal(updateData.gratitude);
+          gratitude.gratitude.should.deep.equal(updateGratitude.gratitude);
         });
       });
     });
@@ -174,7 +109,7 @@ describe('/api/goals API Resource', function() {
         .then(_gratitude => {
           deletedGratitude = _gratitude._id;
           return chai.request(app)
-            .delete(`api/gratitudes/${deletedGratitude}`)
+            .delete(`/api/gratitudes/${deletedGratitude}`)
             .set('Authorization', `Bearer ${token}`)
         })
         .then(res => {
