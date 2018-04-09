@@ -25,19 +25,18 @@ describe('/api/users API Resource', function() {
     return runServer(TEST_DATABASE_URL);
   });
 
-  beforeEach(function(done) {
-    testUserData = generateUserData();
-    User.create(testUserData)
+  beforeEach(function() {
+    return new Promise(resolve => {
+      createTestUser()
       .then(user => {
         testUser = user;
-        console.log(testUserData.email);
-        console.log(testUserData.password);
-        sendAllDataToDb()
-        .then(() => done());
+        return sendAllDataToDb(testUser)
       })
+      .then(() => resolve())
       .catch(err => console.log(err))
+    });
   });
-
+  
   afterEach(function() {
     return tearDownDb();
   });

@@ -4,19 +4,20 @@ const mongoose = require('mongoose');
 const { Goal } = require('../goals/models')
 const { User } = require('../users/models')
 
-function sendAllDataToDb() {
+function sendAllDataToDb(user) {
   console.info('Sending data to database...');
   const testData = [];
   for (let i=1; i<=2; i++) {
-    testData.push(createTestUserAndGoal());
+    testData.push(generateGoalData(user._id));
   }
   return Goal.insertMany(testData);
 }
 
-function generateGoalData() {
+function generateGoalData(userId) {
   console.log(`Generating goal data...`);
   return {
-    gratitude: faker.lorem.sentence(),
+    goal: faker.lorem.sentence(),
+    author: userId
   }
 }
 

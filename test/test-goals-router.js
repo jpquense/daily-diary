@@ -9,30 +9,32 @@ const faker = require('faker');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 
-const { Gratitude } = require('../gratitudes/models')
+const { Goal } = require('../goals/models')
 const { User } = require('../users/models')
 const { app , runServer, closeServer } = require('../server');
 const { TEST_DATABASE_URL, JWT_SECRET } = require('../config.js');
-const { sendAllDataToDb, createTestUser, createTestUserAndGratitude, generateUserData, generateGratitudeData, tearDownDb } = require('./test-functions-gratitudes')
+const { sendAllDataToDb, createTestUser, createTestUserAndGoal, generateUserData, generateGoalData, tearDownDb } = require('./test-functions-goals')
 
 chai.use(chaiHttp);
 
 let testUser;
 
-describe('/api/gratitudes API Resource', function() {
+describe('api/goals API Resource', function() {
   before(function() {
     return runServer(TEST_DATABASE_URL);
   });
 
-  beforeEach(function(done) {
+beforeEach(function() {
+  return new Promise(resolve => {
     createTestUser()
-      .then(user => {
-        testUser = user;
-        return sendAllDataToDb()
-      })
-      .then(() => done())
-      .catch(err => console.log(err))
+    .then(user => {
+      testUser = user;
+      return sendAllDataToDb(testUser)
+    })
+    .then(() => resolve())
+    .catch(err => console.log(err))
   });
+});
 
   afterEach(function() {
     return tearDownDb();
@@ -42,82 +44,82 @@ describe('/api/gratitudes API Resource', function() {
     return closeServer();
   });
 
-  describe('GET request to /gratitudes', function() {
-    it('should list all existing gratitudes', function() {
+  describe('GET request to /goals', function() {
+    it('should list all existing goals', function() {
       const token = jwt.sign({user: {_id: testUser._id}}, JWT_SECRET, {expiresIn: 10000});
       let res;
       return chai.request(app)
-      .get('/api/gratitudes')
+      .get('/api/goals')
       .set('Authorization', `Bearer ${token}`)
       .then(function(_res) {
         res = _res;
         res.should.have.status(200);
         res.should.be.json;
-        res.body.should.be.an('object');
+        expect(res.body).to.be.an('array');
       })
     });
   });
 
-  describe('Post request to /gratitudes', function() {
-    it('should add a gratitude', function() {
+  describe('Post request to /goals', function() {
+    it('should add a goal', function() {
       const token = jwt.sign({user: {_id: testUser._id}}, JWT_SECRET, {expiresIn: 10000});
-      const newGratitude = generateGratitudeData();
+      const newGoal = generateGoalData();
       return chai.request(app)
-        .gratitude('/api/gratitudes')
+        .post('/api/goals')
         .set('Authorization', `Bearer ${token}`)
-        .send(newGratitude)
+        .send(newGoal)
         .then(function(res) {
           expect(res).to.have.status(201);
           expect(res).to.be.json;
-          expect(res.body.gratitude).to.deep.equal(newGratitude.gratitude);
+          expect(res.body.goal).to.deep.equal(newGoal.goal);
       });
     });
   });
 
-  describe('PUT request to /gratitudes', function() {
-    it('should update gratitude', function() {
-      const updateGratitude = {
-        gratitude: faker.lorem.sentence()
+  describe('PUT request to /goals', function() {
+    it('should update goal', function() {
+      const updateGoal = {
+        goal: faker.lorem.sentence()
       };
       const token = jwt.sign({user: {_id: testUser._id}}, JWT_SECRET, {expiresIn: 10000});
-      return Gratitude
+      return Goal
         .findOne()
         .then(result => {
-          updateGratitude._id = result._id;
+          updateGoal._id = result._id;
           return chai.request(app)
-          .put(`/api/gratitudes/${result._id}`)
+          .put(`/api/goals/${result._id}`)
           .set('Authorization', `Bearer ${token}`)
-          .send(updateGratitude)
+          .send(updateGoal)
         })
         .then(res => {
-          res.should.have.status(204);
+          res.should.have.status(200);
           res.should.be.an("object");
-          return Gratitude.findById(updateGratitude._id);
+          return Goal.findById(updateGoal._id);
         })
-        .then(gratitude => {
-          gratitude.gratitude.should.deep.equal(updateGratitude.gratitude);
+        .then(goal => {
+          goal.goal.should.deep.equal(updateGoal.goal);
         });
       });
     });
 
   describe('DELETE endpoint', function() {
-    it('should delete a gratitude by id', function() {
-      let deletedGratitude;
+    it('should delete a goal by id', function() {
+      let deletedGoal;
       const token = jwt.sign({user: {_id: testUser._id}}, JWT_SECRET, {expiresIn: 10000});
-      return Gratitude
+      return Goal
         .findOne()
-        .then(_gratitude => {
-          deletedGratitude = _gratitude._id;
+        .then(_goal => {
+          deletedGoal = _goal._id;
           return chai.request(app)
-            .delete(`/api/gratitudes/${deletedGratitude}`)
+            .delete(`/api/goals/${deletedGoal}`)
             .set('Authorization', `Bearer ${token}`)
         })
         .then(res => {
           res.should.have.status(204);
-          return Gratitude.findById(deletedGratitude);
+          return Goal.findById(deletedGoal);
         })
-        .then(gratitude => {
-          should.not.exist(gratitude);
+        .then(goal => {
+          should.not.exist(goal);
         });
       });
     });

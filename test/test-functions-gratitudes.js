@@ -4,19 +4,20 @@ const mongoose = require('mongoose');
 const { Gratitude } = require('../gratitudes/models')
 const { User } = require('../users/models')
 
-function sendAllDataToDb() {
+function sendAllDataToDb(user) {
   console.info('Sending data to database...');
   const testData = [];
   for (let i=1; i<=2; i++) {
-    testData.push(createTestUserAndGratitude());
+    testData.push(generateGratitudeData(user._id));
   }
   return Gratitude.insertMany(testData);
 }
 
-function generateGratitudeData() {
+function generateGratitudeData(userId) {
   console.log(`Generating gratitude data...`);
   return {
     gratitude: faker.lorem.sentence(),
+    author: userId
   }
 }
 
