@@ -1,40 +1,11 @@
-* {
-box-sizing: border-box;
-font-size: 16px;
-}
-
-body {
-margin-top: 65px;
-color:#0b0c10;
-text-align: center;
-background-size: cover;
-}
-
-h1 {
-    font-size: 64px;
-    font-weight: bolder;
-    color: #0b0c10;
-}
-
 h2 {
     font-size: 26px;
     font-weight: bolder;
     color: #0b0c10;
 }
 
-
 a {
-    color: white;
-}
-
-nav {
-    background-color: rgba(27, 81, 90, 0.7);
-    margin-left: auto;
-    margin-right: auto;
-    position: fixed;
-    top: 0;
-    width: 98%;
-    color: white;
+    color: greenyellow;
 }
 
 form {
@@ -45,7 +16,7 @@ form {
     margin-left: auto;
     margin-right: auto;
     padding: 5px;
-    background-color: #fff;
+    background-color: rgba(27, 81, 90, 0.4);
     border-radius: 5px;
 
 }
@@ -61,13 +32,13 @@ form a {
     text-decoration: none;
 }
 
-form p { 
-    color:#0b0c10;
-    font-size: 12px;
+form p, legend, h2 {
+    color: #0b0c10;
+    font-size: 18px;
 }
 
-.black-text {
-    color:#0b0c10;
+.password {
+    color: black;
 }
 
 .input {
@@ -92,26 +63,27 @@ form p {
 .btn:hover {
     cursor: pointer;
     color: white;
-    background-color:#0b0c10;
+    background-color: black;
 }
 
-.sign-up-success,
-.sign-up-failure {
-  height: 100%;
-  font-size: 15px;
-  width: 300px;
-  margin: 0 auto;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  color: white;
-  background-color: rgba(27, 81, 90, 0.7);
+.alert {
+    font-weight: 700;
+    font-size: 17px;
+    margin-bottom: 15px;
+    color: #0b0c10;
+    color: white;
 }
-.sign-up-success a,
-#sign-up-title a {
-  text-decoration: none;
-  color: #0b0c10;
+
+.hidden {
+    visibility: hidden;
 }
-.sign_up_success a:hover,
-#sign-up-title a:hover {
-  text-decoration: underline;
+
+.limited-offer {
+    margin-left: 15%;
+    margin-right: 15%;
+    margin-bottom: 10px;
+}
+
+.limited-offer h3 {
+font-size: 26px;
 }

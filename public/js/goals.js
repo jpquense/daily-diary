@@ -97,22 +97,23 @@ function displayGoalsModal(data) {
         <header>
         <h2 class="js-modal-header">I will do . . . </h2>
         </header>
-        <div class="modal-body">
+        <div class="modal-body navy-text">
             <div class="get-all row js-item-count ">
                 <h3 class="col-4">Goal Count: ${data.length}</h3>
             </div>
             <form class="js-form-get-goals row">
                 <fieldset aria-role="group">
-                    <legend>Goals</legend>
-                    <div class="col-4">Want to view and edit past goals?</div>
+                    <legend><strong>Goals</strong></legend>
+                    <div class="col-4"><strong>Want to view and edit past goals?</strong></div>
                     <button class="js-goal-btn col-4" type="submit">Get Goals</button>
                 </fieldset>
             </form>
+            <hr>
             <form class="js-form-goal row">
                 <fieldset aria-role="group">
-                    <legend>Add More Goals</legend>
+                    <legend><strong>Add More Goals</strong></legend>
                     <input type="text" class="col-12" id="js-add-item" placeholder="I will walk my dog for being so cute." required>
-                    <label class="col-4" for="js-add-item">Have any other plans?</label>
+                    <label class="col-4" for="js-add-item"><strong>Have any other plans?</strong></label>
                     <button class="col-4 js-btn-post" type="submit" ">Add to List</button>
                 </fieldset>
             </form>

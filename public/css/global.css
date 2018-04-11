@@ -1,15 +1,71 @@
 * {
     box-sizing: border-box;
-    font-size: 16px;
+    font-size: 20px;
 }
 
 body {
-    font-family: arial, sans-serif;
-    margin-top: 50px;
-    background: cover;
-    color: #0b0c10;
-    background-size: cover;
-    background-image: url('/images/family.jpg');
+    font-family: 'Hi Melody', monospace, arial;
+    color: darkgreen;
+}
+nav {
+    text-align: center;
+    overflow: hidden;
+    background-image: linear-gradient(to right, darkgreen, yellowgreen);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: darkgreen;
+    color: lightcyan;
+}
+
+nav button {
+    background-color:green;
+    color: lightcyan;
+}
+
+h1 {
+    text-align: center;
+    font-size: 64px;
+    font-weight: bolder;
+    color: green;
+    margin-top: 100px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+nav .nav-title {
+    font-size: 22px;
+}
+
+button {
+    font-size: 16px;
+    background-color:green;
+    color: lightcyan;
+    margin: 5px auto;
+    width: 200px;
+    padding-top: 5px;
+    padding-bottom: 5px; 
+    border-radius: 5px;
+    display: block;
+}
+
+button:hover {
+    cursor: pointer;
+    background-color:darkgreen;
+    color: whitesmoke;
+}
+
+.footer {
+    text-align: center;
+    border: 1px solid darkgreen;
+    border-radius: 5px;
+    margin-left: 10%;
+    margin-right: 10%;
+    font-size: 16px;
+}
+
+.footer a {
+    color: green;
 }
 
 #loader-wrapper {
@@ -36,4 +92,142 @@ body {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* modal */
+
+.modal {
+    position: relative;
+    background-color: lightgrey;
+    width: 90%;
+    margin: 10px auto;
+    transform: translate(0, 0);
+    max-width: 1000px;
+}
+
+.modal-body {
+    background-color: white;
+    color: black;
+    padding-bottom: 25px;
+    margin: 0;
+}
+
+.modal h2 {
+    padding-top: 10px;
+    text-align: center;
+    font-size: 30px;
+}
+
+.get-some {
+    padding-top: 15px;
+}
+
+.get-all {
+    padding-top: 20px;
+}
+
+.modal footer {
+    padding-bottom: 1px;
+}
+
+.modal label, input  {
+    margin-bottom: 15px;
+}
+
+.modal input[type="number"]  {
+    margin-top: 5px;
+    margin-right: 25px;
+    width: 100px;;
+}
+
+.list-header {
+    text-align: center;
+    background-color: lightgrey;
+    margin-left: 15px;
+    margin-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 20px
+}
+
+.grat-list {
+    margin: 30px;
+}
+
+.modal ul {
+    padding: 10px;
+    text-align: left;
+}
+
+.modal hr {
+    border-bottom: 0;
+    margin: 10px 0 20px 0;
+}
+
+.modal .add-items {
+    background-color: lightgrey;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.modal .form-control {
+    padding: 4px;
+    margin-top: 20px;
+}
+
+.modal .form-input {
+    padding: 4px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.js-list li {
+    padding: 0 5px 0 0;
+}
+
+.modal buttons {
+    width: 200px;
+}
+
+.paragraph {
+    text-align: center;
+    font-weight: bolder;
+    background-image: linear-gradient(to right, whitesmoke, yellowgreen);
+    color: darkgreen;
+}
+
+.paragraph h2 {
+    font-size: 26px;  
+    color: darkgreen;  
+}
+
+.paragraph p {
+    font-size: 20px;    
+}
+
+/* MEDIA QUERIES */
+@media only screen and (min-width: 400px) {
+    .footer {
+        margin-left: 1%;
+        margin-right: 1%;
+    }
+}
+
+@media only screen and (min-width: 520px) {
+    .footer {
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+    .footer {
+        margin-left: 15%;
+        margin-right: 15%;
+    }
+}
+@media only screen and (min-width: 700px) {
+    .footer {
+        margin-left: 20%;
+        margin-right: 20%;
+    }
 }
