@@ -9,13 +9,13 @@ Daily Diary is an application that encourages and allows users to track gratitud
 ## Screenshots
 
 ### Dashboard
-![Home](images/home.png)
+![Home](images/home.png "Home")
 
 ### Modal
-![Modal](images/modal.png)
+![Modal](images/modal.png "Modal")
 
 ### Signup
-![Signup](images/signup.png)
+![Signup](public/images/signup.png "Signup")
 
 ## User Experience
 This application allows users to create a private account. Once logged in to their account, they are presented with the options of Goals and Gratitudes. They can add, update, delete or view gratitudes and goals The user can do this as many times as they would like. Once submitted, the user can then see their posts in the by selecting View goals and gratitudes.
