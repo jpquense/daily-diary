@@ -9,10 +9,10 @@ Daily Diary is an application that encourages and allows users to track gratitud
 ## Screenshots
 
 ### Dashboard
-![Home](images/home.png "Home")
+![Home](public/images/home.png "Home")
 
 ### Modal
-![Modal](images/modal.png "Modal")
+![Modal](public/images/modal.png "Modal")
 
 ### Signup
 ![Signup](public/images/signup.png "Signup")
