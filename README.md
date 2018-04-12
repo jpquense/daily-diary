@@ -20,6 +20,7 @@ Daily Diary is an application that encourages and allows users to track gratitud
 ## User Experience
 This application allows users to create a private account. Once logged in to their account, they are presented with the options of Goals and Gratitudes. They can add, update, delete or view gratitudes and goals The user can do this as many times as they would like. Once submitted, the user can then see their posts in the by selecting View goals and gratitudes.
 
+## Try it out [Daily Diary](https://tranquil-wave-50065.herokuapp.com/signup.html)
 
 ## Technical
 
