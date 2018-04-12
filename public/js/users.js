@@ -34,6 +34,11 @@ function postNewUser (firstName, lastName, username, email, password) {
                 $('#signup-form').prepend(
                     `<div class='sign-up-success'><span style='vertical-align: middle;'>Hurray! You have successfully signed up! Now you can <a href='/'>login</a>!<span></div>`
                 )
+                $('input[id="js-signup-firstName"]').val('');
+                $('input[id="js-signup-lastName"]').val('');
+                $('input[id="js-signup-username"]').val('');
+                $('input[id="js-signup-email"]').val('');
+                $('input[id="js-signup-password"]').val('');
             }
         },
         error: (...rest) => {
@@ -80,3 +85,10 @@ function postReturningUser(email, password) {
         }
     });
 }
+
+$(function() {
+	const token = localStorage.getItem('authToken');
+  if (token) {
+		location.href="/home.html";
+  }
+})

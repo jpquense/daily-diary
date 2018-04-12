@@ -87,3 +87,12 @@ form p, legend, h2 {
 .limited-offer h3 {
 font-size: 26px;
 }
+
+.sign-up-success,
+.sign-up-failure {
+    text-align: center;
+}
+
+.sign-up-success a {
+    color: green;
+}

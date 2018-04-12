@@ -4,10 +4,12 @@
 }
 
 body {
+    margin: 0;
     font-family: 'Hi Melody', monospace, arial;
     color: darkgreen;
 }
 nav {
+    z-index: 2;
     text-align: center;
     overflow: hidden;
     background-image: linear-gradient(to right, darkgreen, yellowgreen);
